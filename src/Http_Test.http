@@ -1,0 +1,21 @@
+POST http://localhost:9090/
+
+{
+		"id": 3,
+		"date":        "5/13/2021",
+		"description": "Taper!"
+}
+
+DELETE http://localhost:9090/4
+
+GET http://localhost:9090/
+
+GET http://localhost:10000/Workouts/workout1528
+
+PUT http://localhost:9090/3
+
+{
+    "Description" : "Test 5"
+}
+
+DELETE http://localhost:10000/articles/4
