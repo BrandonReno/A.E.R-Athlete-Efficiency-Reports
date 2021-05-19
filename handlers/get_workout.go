@@ -2,7 +2,7 @@ package handlers
 
 import (
 	"net/http"
-	"github.com/BrandonReno/A.E.R-Athlete-Efficiency-Reports/data"
+	"github.com/BrandonReno/A.E.R/data"
 )
 
 // Gets all workouts in the system

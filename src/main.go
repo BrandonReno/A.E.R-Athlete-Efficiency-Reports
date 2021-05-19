@@ -7,7 +7,7 @@ import (
 	"os"
 	"os/signal"
 	"time"
-	"github.com/BrandonReno/A.E.R-Athlete-Efficiency-Reports/handlers"
+	"github.com/BrandonReno/A.E.R/handlers"
 	"github.com/go-openapi/runtime/middleware"
 	"github.com/gorilla/mux"
 )

@@ -6,7 +6,7 @@ POST http://localhost:9090/
 		"description": "Taper!"
 }
 
-DELETE http://localhost:9090/4
+DELETE http://localhost:9090/3
 
 GET http://localhost:9090/
 

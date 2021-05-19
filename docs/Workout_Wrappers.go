@@ -16,7 +16,7 @@
 //	swagger:meta
 package docs
 
-import "github.com/BrandonReno/Workouts/data"
+import "github.com/BrandonReno/A.E.R/data"
 
 //A list of workouts returns in the response
 // swagger:response workoutsResponse
