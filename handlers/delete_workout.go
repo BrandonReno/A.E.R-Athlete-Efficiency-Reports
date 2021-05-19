@@ -3,7 +3,7 @@ package handlers
 import (
 	"net/http"
 	"strconv"
-	"github.com/BrandonReno/Workouts/data"
+	"github.com/BrandonReno/A.E.R-Athlete-Efficiency-Reports/data"
 	"github.com/gorilla/mux"
 )
 

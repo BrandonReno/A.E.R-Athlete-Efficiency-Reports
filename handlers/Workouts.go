@@ -4,11 +4,9 @@ import (
 	"log"
 	"fmt"
 	"net/http"
-	"github.com/BrandonReno/Workouts/data"
+	"github.com/BrandonReno/A.E.R-Athlete-Efficiency-Reports/data"
 	"context"
 )
-
-
 
 type Workout_Log struct{
 	l *log.Logger //Hold a logger that can write errors to the log output
