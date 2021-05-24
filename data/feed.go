@@ -1,9 +1,7 @@
 package data
 
 import (
-	"encoding/json"
 	"fmt"
-	"io"
 	"github.com/go-playground/validator"
 	"strings"
 )
@@ -45,14 +43,6 @@ func validateSport(fl validator.FieldLevel) bool{
 		}
 	}
 	return false
-}
-
-func (wf *Workout_Feed) ToJSON(w io.Writer) error {
-	return json.NewEncoder(w).Encode(wf) // Create a new encoder and encode the current Workout_Feed to json. Returns an error just in case
-}
-
-func (w *Workout) FromJSON(r io.Reader) error{
-	return json.NewDecoder(r).Decode(w) // Create a new decoder and decode the request body to json. Returns an error just in case
 }
 
 //Definition of private workoutFeed list

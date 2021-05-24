@@ -80,11 +80,19 @@ paths:
       - http
       tags:
       - workouts
+  /workouts:
     post:
       consumes:
       - application/json
       description: Adds a new workout to the database
       operationId: addWorkout
+      parameters:
+      - in: body
+        name: Body
+        schema:
+          items:
+            $ref: '#/definitions/Workout'
+          type: array
       responses:
         "201":
           $ref: '#/responses/noContent'
@@ -94,7 +102,7 @@ paths:
       - http
       tags:
       - workouts
-  /{id}:
+  /workouts/wid{id}:
     delete:
       description: Deletes a specified workout by id
       operationId: deleteWorkout
@@ -115,6 +123,28 @@ paths:
       - http
       tags:
       - workouts
+    get:
+      description: Displays a single workout based upon the inputted ID
+      operationId: getWorkout
+      parameters:
+      - example: 374638
+        format: int64
+        in: path
+        name: id
+        required: true
+        type: integer
+        x-go-name: ID
+      produces:
+      - application/json
+      responses:
+        "200":
+          $ref: '#/responses/singleWorkout'
+        "400":
+          $ref: '#/responses/verror'
+      schemes:
+      - http
+      tags:
+      - workouts
     put:
       consumes:
       - application/json
@@ -128,6 +158,12 @@ paths:
         required: true
         type: integer
         x-go-name: ID
+      - in: body
+        name: Body
+        schema:
+          items:
+            $ref: '#/definitions/Workout'
+          type: array
       produces:
       - application/json
       responses:
@@ -152,6 +188,10 @@ responses:
         type: string
   noContent:
     description: No content is returned
+  singleWorkout:
+    description: A single workout returns in the response
+    schema:
+      $ref: '#/definitions/Workout'
   verror:
     description: Validation Error
     headers:
