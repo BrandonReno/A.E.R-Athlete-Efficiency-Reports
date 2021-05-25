@@ -7,6 +7,8 @@ import (
 	"os"
 	"os/signal"
 	"time"
+
+	"github.com/BrandonReno/A.E.R/data"
 	"github.com/BrandonReno/A.E.R/handlers"
 	"github.com/go-openapi/runtime/middleware"
 	"github.com/gorilla/mux"
@@ -53,6 +55,12 @@ func main(){
 		IdleTimeout: 120 * time.Second, //Idle timeout is 120 seconds
 	}
 
+	err := data.OpenDBConnection()
+
+	if err != nil{
+		l.Fatal(err)
+	}
+
 	// Listen and serve in a go routine to allow for graceful shutdown
 	go func(){
 		err := s.ListenAndServe()
@@ -69,6 +77,7 @@ func main(){
 
 	sig_result := <-sigChan //Send channel Signal output to result to log the reasoning for shutdown
 	l.Println("Shutdown initiated with ", sig_result)
+	data.DBConn.Close() //close database connection
 
 	tc, _ := context.WithTimeout(context.Background(), 30 * time.Second) //Give system 30 seconds to complete handlers
 	s.Shutdown(tc) //Shutdown server gracefully
