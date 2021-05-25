@@ -1,27 +1,24 @@
-POST http://localhost:9090/workouts
+POST http://localhost:9090/workouts/uf23b
 
 {
-    "id": 1,
-    "user": {
-      "athlete_id": 1,
-      "name": "Brandon Reno",
-      "sport": "Swimming",
-      "age": 23
-    },
+    
     "date": "5/13/2021",
-    "description": "Hard Workout"
+    "description": "Hard Workout",
+    "sport": "swimming",
+    "rating": 3
 }
 
-DELETE http://localhost:9090/workouts/wid3
-
-GET http://localhost:9090/workouts/wid3
+GET http://localhost:9090/workouts/uf23b
 
 GET http://localhost:10000/Workouts/workout1528
 
-PUT http://localhost:9090/3
+PUT http://localhost:9090/workouts/uf23b/4
 
 {
-    "Description" : "Test 5"
+    "date": "5-23-2021",
+    "Description" : "changed the desc!",
+    "sport": "swimming",
+    "rating": 3
 }
 
 DELETE http://localhost:10000/articles/4

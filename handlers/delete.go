@@ -2,9 +2,6 @@ package handlers
 
 import (
 	"net/http"
-	"strconv"
-	"github.com/BrandonReno/A.E.R/data"
-	"github.com/gorilla/mux"
 )
 
 // Delete a workout from the database
@@ -19,18 +16,4 @@ func DeleteWorkout(rw http.ResponseWriter, r *http.Request){
 	//			201: noContent
 	//			404: badRequest
     
-	params := mux.Vars(r)
-	id, err := strconv.Atoi(params["id"])
-
-	if err != nil{
-		http.Error(rw, "Could not convert ID to string", http.StatusInternalServerError)
-		return 
-	}
-
-	err = data.DeleteWorkout(id)
-
-	if err != nil{
-		http.Error(rw, "Could not delete workout", http.StatusNotFound)
-		return
-	}
 }

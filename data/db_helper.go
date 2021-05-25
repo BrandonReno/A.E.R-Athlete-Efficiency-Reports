@@ -2,6 +2,7 @@ package data
 
 import(
 	"math/rand"
+	"fmt"
 	"time"
 )
 
@@ -59,7 +60,7 @@ func UpdateAthlete(a *Athlete) error{
 
 func CreateWorkout(w *Workout) error{
 	sqlStatement := `INSERT INTO public.workout VALUES($1, $2, $3, $4, $5, $6);`
-	_, err := DBConn.Exec(sqlStatement, w.Workout_ID, w.Date, w.Description, w.Sport, w.Rating, w.Athlete_ID)
+	_, err := DBConn.Exec(sqlStatement,w.Workout_ID, w.Date, w.Description, w.Sport, w.Athlete_ID, w.Rating)
 
 	return err
 }
@@ -77,6 +78,7 @@ func GetUserWorkouts(id string) ([]Workout, error){
 	var workout Workout
 	for rows.Next(){
 		err := rows.Scan(&workout.Date, &workout.Description, &workout.Sport, &workout.Rating)
+		fmt.Printf("%+v", workout)
 		if err != nil{
 			return nil, err
 		}
@@ -90,4 +92,15 @@ func GetUserWorkouts(id string) ([]Workout, error){
 	}
 
 	return wl, nil
+}
+
+func UpdateWorkout(w *Workout) error{
+	sqlStatement := `UPDATE public.workout 
+					SET Date = $1,
+						Description = $2,
+						Sport = $3,
+						Rating = $4
+						WHERE Workout_ID = $5;`
+	_, err := DBConn.Exec(sqlStatement, w.Date, w.Description, w.Sport, w.Rating, w.Workout_ID)
+	return err
 }

@@ -7,7 +7,6 @@ import (
 	"os"
 	"os/signal"
 	"time"
-
 	"github.com/BrandonReno/A.E.R/data"
 	"github.com/BrandonReno/A.E.R/handlers"
 	"github.com/go-openapi/runtime/middleware"
@@ -26,18 +25,17 @@ func main(){
 	server_mux := mux.NewRouter() //Create a new mux router to handle RESTful services
 	
 	GetSrouter :=server_mux.Methods(http.MethodGet).Subrouter() //Create a subrouter of router server_mux just for get requests
-	GetSrouter.HandleFunc("/workouts", handlers.GetWorkouts)
-	GetSrouter.HandleFunc("/workouts/wid{id:[0-9]+}", handlers.GetSingleWorkout)
+	GetSrouter.HandleFunc("/workouts/{athlete_id:[[:alnum:]]+}", handlers.GetWorkouts)
 
-	DeleteSrouter := server_mux.Methods(http.MethodDelete).Subrouter() // Create a subrouter of router server_mux for delete requests
-	DeleteSrouter.HandleFunc("/workouts/wid{id:[0-9]+}", handlers.DeleteWorkout)
+	//DeleteSrouter := server_mux.Methods(http.MethodDelete).Subrouter() // Create a subrouter of router server_mux for delete requests
+	//DeleteSrouter.HandleFunc("/workouts/wid{id:[0-9]+}", handlers.DeleteWorkout)
 
 	PutSrouter := server_mux.Methods(http.MethodPut).Subrouter() //Create a subrouter of router server_mux just for put requests
-	PutSrouter.HandleFunc("/workouts/wid{id:[0-9]+}", handlers.UpdateWorkout)
+	PutSrouter.HandleFunc("/workouts/{athlete_id:[[:alnum:]]+}/{workout_id:[0-9]+}", handlers.UpdateWorkout)
 	PutSrouter.Use(wl.MiddlewareWorkoutValidation) //Add middleware, step before Handlefunc
 
 	PostSrouter := server_mux.Methods(http.MethodPost).Subrouter()  //Create a subrouter of router server_mux just for post requests
-	PostSrouter.HandleFunc("/workouts", handlers.AddWorkout)
+	PostSrouter.HandleFunc("/workouts/{athlete_id:[[:alnum:]]+}", handlers.AddWorkout)
 	PostSrouter.Use(wl.MiddlewareWorkoutValidation) //Add middleware, step before Handlefunc
 
 	opts := middleware.RedocOpts{SpecURL: "/swagger.yaml"}

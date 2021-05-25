@@ -1,7 +1,9 @@
 package handlers
 
-import(
+import (
+	"fmt"
 	"net/http"
+
 	"github.com/BrandonReno/A.E.R/data"
 )
 
@@ -20,6 +22,12 @@ func AddWorkout(rw http.ResponseWriter, r *http.Request){
 	//			201 : noContent
 	//			400 : verror
 
-	workout := r.Context().Value(KeyWorkout{}).(data.Workout) //recieve the stored body from the request context and store the struct in a new workout object
-	data.AddWorkout(&workout) //Add the workout to the list
+	workout := r.Context().Value(KeyCtx{}).(data.Workout)
+	err := data.CreateWorkout(&workout)
+	if err != nil{
+		http.Error(rw, fmt.Sprintf("Error in creating workout: %s", err), http.StatusInternalServerError)
+		return
+	}
+	
+
 }
