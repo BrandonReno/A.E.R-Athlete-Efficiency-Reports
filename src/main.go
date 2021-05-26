@@ -24,26 +24,42 @@ func main(){
 
 	server_mux := mux.NewRouter() //Create a new mux router to handle RESTful services
 	
-	GetSrouter :=server_mux.Methods(http.MethodGet).Subrouter() //Create a subrouter of router server_mux just for get requests
-	GetSrouter.HandleFunc("/workouts/{athlete_id:[[:alnum:]]+}", handlers.GetWorkouts)
-	GetSrouter.HandleFunc("/workouts/{athlete_id:[[:alnum:]]+}/{workout_id:[0-9]+}", handlers.GetSingleWorkout)
+	WGetSrouter :=server_mux.Methods(http.MethodGet).Subrouter() //Create a subrouter of router server_mux just for get requests
+	WGetSrouter.HandleFunc("/workouts/{athlete_id:[[:alnum:]]+}", handlers.GetWorkouts)
+	WGetSrouter.HandleFunc("/workouts/{athlete_id:[[:alnum:]]+}/{workout_id:[0-9]+}", handlers.GetSingleWorkout)
+	
 
-	DeleteSrouter := server_mux.Methods(http.MethodDelete).Subrouter() // Create a subrouter of router server_mux for delete requests
-	DeleteSrouter.HandleFunc("/workouts/{athlete_id:[[:alnum:]]+}/{workout_id:[0-9]+}", handlers.DeleteWorkout)
+	WDeleteSrouter := server_mux.Methods(http.MethodDelete).Subrouter() // Create a subrouter of router server_mux for delete requests
+	WDeleteSrouter.HandleFunc("/workouts/{athlete_id:[[:alnum:]]+}/{workout_id:[0-9]+}", handlers.DeleteWorkout)
 
-	PutSrouter := server_mux.Methods(http.MethodPut).Subrouter() //Create a subrouter of router server_mux just for put requests
-	PutSrouter.HandleFunc("/workouts/{athlete_id:[[:alnum:]]+}/{workout_id:[0-9]+}", handlers.UpdateWorkout)
-	PutSrouter.Use(wl.MiddlewareWorkoutValidation) //Add middleware, step before Handlefunc
+	WPutSrouter := server_mux.Methods(http.MethodPut).Subrouter() //Create a subrouter of router server_mux just for put requests
+	WPutSrouter.HandleFunc("/workouts/{athlete_id:[[:alnum:]]+}/{workout_id:[0-9]+}", handlers.UpdateWorkout)
+	WPutSrouter.Use(wl.MiddlewareWorkoutValidation) //Add middleware, step before Handlefunc
 
-	PostSrouter := server_mux.Methods(http.MethodPost).Subrouter()  //Create a subrouter of router server_mux just for post requests
-	PostSrouter.HandleFunc("/workouts/{athlete_id:[[:alnum:]]+}", handlers.AddWorkout)
-	PostSrouter.Use(wl.MiddlewareWorkoutValidation) //Add middleware, step before Handlefunc
+	WPostSrouter := server_mux.Methods(http.MethodPost).Subrouter()  //Create a subrouter of router server_mux just for post requests
+	WPostSrouter.HandleFunc("/workouts/{athlete_id:[[:alnum:]]+}", handlers.AddWorkout)
+	WPostSrouter.Use(wl.MiddlewareWorkoutValidation) //Add middleware, step before Handlefunc
+	
+	
+
+	AGetSrouter := server_mux.Methods(http.MethodGet).Subrouter()
+	AGetSrouter.HandleFunc("/athlete/{athlete_id:[[:alnum:]]+}", handlers.GetAthlete)
+	
+	APostSrouter := server_mux.Methods(http.MethodPost).Subrouter()
+	APostSrouter.HandleFunc("/athlete", handlers.CreateAthlete)
+	APostSrouter.Use(wl.MiddlewarAthleteValidation)
+
+	APutSrouter :=server_mux.Methods(http.MethodPut).Subrouter()
+	APutSrouter.HandleFunc("/athlete/{athlete_id:[[:alnum:]]+}", handlers.UpdateAthlete)
+	APutSrouter.Use(wl.MiddlewarAthleteValidation)
+
+
 
 	opts := middleware.RedocOpts{SpecURL: "/swagger.yaml"}
 	sh := middleware.Redoc(opts, nil)
 
-	GetSrouter.Handle("/docs", sh) //Set up the GetSrouter to also handle the docs
-	GetSrouter.Handle("/swagger.yaml", http.FileServer(http.Dir("./"))) //Serve the swagger.yaml file on the server
+	WGetSrouter.Handle("/docs", sh) //Set up the GetSrouter to also handle the docs
+	WGetSrouter.Handle("/swagger.yaml", http.FileServer(http.Dir("./"))) //Serve the swagger.yaml file on the server
 
 	//Create the server :"s"
 	s := http.Server{

@@ -61,3 +61,17 @@ func GetSingleWorkout(rw http.ResponseWriter, r *http.Request){
 		http.Error(rw, fmt.Sprintf("Error in serializing workout: %s", err), http.StatusBadRequest)
 	}
 }
+
+
+func GetAthlete(rw http.ResponseWriter, r *http.Request){
+
+	//swagger here
+
+	athlete_id := getAthleteID(r)
+	athlete, err := data.GetAthlete(athlete_id)
+	if err != nil{
+		http.Error(rw, fmt.Sprintf("Error in getting athlete: %s", err), http.StatusBadRequest)
+		return
+	}
+	data.ToJSON(athlete, rw)
+}

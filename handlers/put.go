@@ -42,3 +42,18 @@ func UpdateWorkout(rw http.ResponseWriter, r *http.Request) {
 		return
 	}
 }
+
+func UpdateAthlete(rw http.ResponseWriter, r *http.Request){
+
+
+	//swagger
+	athlete_id := getAthleteID(r)
+	athlete := r.Context().Value(KeyCtx{}).(data.Athlete)
+	athlete.Athlete_ID = athlete_id
+	err := data.UpdateAthlete(&athlete)
+	if err != nil{
+		http.Error(rw, fmt.Sprintf("Error in updating athlete: %s", err), http.StatusBadRequest)
+		return
+	}
+
+}

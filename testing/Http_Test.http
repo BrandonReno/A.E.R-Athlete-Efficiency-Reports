@@ -22,4 +22,20 @@ PUT http://localhost:9090/workouts/uf23b/4
     "rating": 3
 }
 
-DELETE http://localhost:10000/articles/4
+GET http://localhost:9090/athlete/R5HYMiks5d
+
+POST http://localhost:9090/athlete
+
+{
+    "first_name": "Erik",
+    "last_name": "Clemensen",
+    "age": 22
+}
+
+PUT http://localhost:9090/athlete/R5HYMiks5d
+
+{
+    "first_name": "Kelsey",
+    "last_name": "LLoyd",
+    "age": 20
+}

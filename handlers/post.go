@@ -31,3 +31,16 @@ func AddWorkout(rw http.ResponseWriter, r *http.Request){
 	
 
 }
+
+func CreateAthlete(rw http.ResponseWriter, r *http.Request){
+
+	//swagger
+
+	athlete := r.Context().Value(KeyCtx{}).(data.Athlete)
+	err := data.AddAthlete(&athlete)
+
+	if err != nil{
+		http.Error(rw, fmt.Sprintf("Error in creating athlete: %s", err), http.StatusBadRequest)
+		return
+	}
+}
