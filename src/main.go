@@ -28,8 +28,8 @@ func main(){
 	GetSrouter.HandleFunc("/workouts/{athlete_id:[[:alnum:]]+}", handlers.GetWorkouts)
 	GetSrouter.HandleFunc("/workouts/{athlete_id:[[:alnum:]]+}/{workout_id:[0-9]+}", handlers.GetSingleWorkout)
 
-	//DeleteSrouter := server_mux.Methods(http.MethodDelete).Subrouter() // Create a subrouter of router server_mux for delete requests
-	//DeleteSrouter.HandleFunc("/workouts/wid{id:[0-9]+}", handlers.DeleteWorkout)
+	DeleteSrouter := server_mux.Methods(http.MethodDelete).Subrouter() // Create a subrouter of router server_mux for delete requests
+	DeleteSrouter.HandleFunc("/workouts/{athlete_id:[[:alnum:]]+}/{workout_id:[0-9]+}", handlers.DeleteWorkout)
 
 	PutSrouter := server_mux.Methods(http.MethodPut).Subrouter() //Create a subrouter of router server_mux just for put requests
 	PutSrouter.HandleFunc("/workouts/{athlete_id:[[:alnum:]]+}/{workout_id:[0-9]+}", handlers.UpdateWorkout)

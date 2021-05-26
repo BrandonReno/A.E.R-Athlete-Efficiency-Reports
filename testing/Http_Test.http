@@ -9,7 +9,9 @@ POST http://localhost:9090/workouts/uf23b
 
 GET http://localhost:9090/workouts/uf23b
 
-GET http://localhost:10000/Workouts/workout1528
+GET http://localhost:9090/workouts/uf23b/5
+
+DELETE http://localhost:9090/workouts/uf23b/5
 
 PUT http://localhost:9090/workouts/uf23b/4
 

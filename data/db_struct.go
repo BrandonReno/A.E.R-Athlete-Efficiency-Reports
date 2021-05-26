@@ -14,7 +14,7 @@ type Efficiency struct {
 
 //Workout Structure which holds details about an athletes workout
 type Workout struct {
-	Workout_ID  int    `json:"-"`
+	Workout_ID  int    `json:"workout_id"`
 	Athlete_ID  string `json:"-" validate:"required"`
 	Date        string `json:"date"`
 	Description string `json:"description" validate:"required"`

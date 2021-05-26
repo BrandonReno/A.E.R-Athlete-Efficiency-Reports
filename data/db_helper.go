@@ -67,7 +67,7 @@ func CreateWorkout(w *Workout) error{
 
 func GetUserWorkouts(id string) ([]Workout, error){
 	var wl []Workout
-	sqlStatement := `SELECT date, description, sport, rating FROM public.workout WHERE Athlete_ID = $1`
+	sqlStatement := `SELECT workout_id, date, description, sport, rating FROM public.workout WHERE Athlete_ID = $1`
 	rows, err := DBConn.Query(sqlStatement, id)
 	defer rows.Close()
 
@@ -77,7 +77,7 @@ func GetUserWorkouts(id string) ([]Workout, error){
 
 	var workout Workout
 	for rows.Next(){
-		err := rows.Scan(&workout.Date, &workout.Description, &workout.Sport, &workout.Rating)
+		err := rows.Scan(&workout.Workout_ID, &workout.Date, &workout.Description, &workout.Sport, &workout.Rating)
 		if err != nil{
 			return nil, err
 		}
@@ -119,5 +119,11 @@ func UpdateWorkout(w *Workout) error{
 						Rating = $4
 						WHERE Workout_ID = $5;`
 	_, err := DBConn.Exec(sqlStatement, w.Date, w.Description, w.Sport, w.Rating, w.Workout_ID)
+	return err
+}
+
+func DeleteWorkout(aid string, wid int) error{
+	sqlStatement := `DELETE FROM public.workout WHERE Workout_ID = $1 AND Athlete_ID = $2`
+	_, err := DBConn.Exec(sqlStatement, wid, aid)
 	return err
 }
