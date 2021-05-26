@@ -26,6 +26,7 @@ func main(){
 	
 	GetSrouter :=server_mux.Methods(http.MethodGet).Subrouter() //Create a subrouter of router server_mux just for get requests
 	GetSrouter.HandleFunc("/workouts/{athlete_id:[[:alnum:]]+}", handlers.GetWorkouts)
+	GetSrouter.HandleFunc("/workouts/{athlete_id:[[:alnum:]]+}/{workout_id:[0-9]+}", handlers.GetSingleWorkout)
 
 	//DeleteSrouter := server_mux.Methods(http.MethodDelete).Subrouter() // Create a subrouter of router server_mux for delete requests
 	//DeleteSrouter.HandleFunc("/workouts/wid{id:[0-9]+}", handlers.DeleteWorkout)

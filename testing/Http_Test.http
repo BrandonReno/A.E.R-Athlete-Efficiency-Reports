@@ -1,7 +1,6 @@
 POST http://localhost:9090/workouts/uf23b
 
 {
-    
     "date": "5/13/2021",
     "description": "Hard Workout",
     "sport": "swimming",

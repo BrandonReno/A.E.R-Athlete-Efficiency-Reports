@@ -33,3 +33,31 @@ func GetWorkouts(rw http.ResponseWriter, r *http.Request){
 		return 
 	}
 }
+
+func GetSingleWorkout(rw http.ResponseWriter, r *http.Request){
+
+	//swagger stuff here
+
+
+
+	Athlete_ID := getAthleteID(r)
+	Workout_ID, err := getWorkoutID(r)
+
+	if err != nil{
+		http.Error(rw, fmt.Sprintf("Error in converting string to int: %s", err), http.StatusInternalServerError)
+		return
+	}
+
+	w, err := data.GetSingleWorkout(Athlete_ID, Workout_ID)
+
+	if err != nil{
+		http.Error(rw, fmt.Sprintf("Error in getting workout: %s", err), http.StatusBadRequest)
+		return
+	}
+
+	err = data.ToJSON(w, rw)
+
+	if err != nil{
+		http.Error(rw, fmt.Sprintf("Error in serializing workout: %s", err), http.StatusBadRequest)
+	}
+}

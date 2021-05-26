@@ -59,9 +59,9 @@ func UpdateAthlete(a *Athlete) error{
 
 
 func CreateWorkout(w *Workout) error{
-	sqlStatement := `INSERT INTO public.workout VALUES($1, $2, $3, $4, $5, $6);`
-	_, err := DBConn.Exec(sqlStatement,w.Workout_ID, w.Date, w.Description, w.Sport, w.Athlete_ID, w.Rating)
-
+	sqlStatement := `INSERT INTO public.workout(date, description, sport, athlete_id, rating)
+					 VALUES($1, $2, $3, $4, $5);`
+	_, err := DBConn.Exec(sqlStatement,w.Date, w.Description, w.Sport, w.Athlete_ID, w.Rating)
 	return err
 }
 
@@ -78,7 +78,6 @@ func GetUserWorkouts(id string) ([]Workout, error){
 	var workout Workout
 	for rows.Next(){
 		err := rows.Scan(&workout.Date, &workout.Description, &workout.Sport, &workout.Rating)
-		fmt.Printf("%+v", workout)
 		if err != nil{
 			return nil, err
 		}
@@ -92,6 +91,24 @@ func GetUserWorkouts(id string) ([]Workout, error){
 	}
 
 	return wl, nil
+}
+
+var cantFindWorkout error = fmt.Errorf("Can not find workout id in athletes workouts")
+
+func GetSingleWorkout(aid string, wid int) (Workout, error){
+	wl, err := GetUserWorkouts(aid)
+
+	if err != nil{
+		return Workout{}, err
+	}
+
+	for _, w := range wl{
+		if w.Workout_ID == wid{
+			return w, nil
+		}
+	}
+
+	return Workout{}, cantFindWorkout
 }
 
 func UpdateWorkout(w *Workout) error{
