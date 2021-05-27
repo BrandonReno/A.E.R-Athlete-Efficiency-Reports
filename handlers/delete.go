@@ -30,3 +30,18 @@ func DeleteWorkout(rw http.ResponseWriter, r *http.Request){
 		return
 	}
 }
+
+
+func DeleteAthlete(rw http.ResponseWriter, r *http.Request){
+
+
+	//swagger
+
+	athlete_id := getAthleteID(r)
+	err := data.DeleteAthlete(athlete_id)
+	if err != nil{
+		http.Error(rw, fmt.Sprintf("Error deleting athlete: %s", err), http.StatusBadRequest)
+		return
+	}
+	
+}

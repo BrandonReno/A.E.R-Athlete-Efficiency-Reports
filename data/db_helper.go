@@ -57,6 +57,12 @@ func UpdateAthlete(a *Athlete) error{
 	return err
 }
 
+func DeleteAthlete(aid string) error{
+	sqlStatement := `DELETE FROM public.athlete WHERE Athlete_ID = $1`
+	_, err := DBConn.Exec(sqlStatement, aid)
+	return err
+}
+
 
 
 

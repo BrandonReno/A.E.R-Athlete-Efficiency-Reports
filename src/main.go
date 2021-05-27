@@ -49,9 +49,12 @@ func main(){
 	APostSrouter.HandleFunc("/athlete", handlers.CreateAthlete)
 	APostSrouter.Use(wl.MiddlewarAthleteValidation)
 
-	APutSrouter :=server_mux.Methods(http.MethodPut).Subrouter()
+	APutSrouter := server_mux.Methods(http.MethodPut).Subrouter()
 	APutSrouter.HandleFunc("/athlete/{athlete_id:[[:alnum:]]+}", handlers.UpdateAthlete)
 	APutSrouter.Use(wl.MiddlewarAthleteValidation)
+
+	ADeleteSrouter := server_mux.Methods(http.MethodDelete).Subrouter()
+	ADeleteSrouter.HandleFunc("/athlete/{athlete_id:[[:alnum:]]+}", handlers.DeleteAthlete)
 
 
 
