@@ -8,5 +8,6 @@ require (
 	github.com/go-playground/validator v9.31.0+incompatible
 	github.com/gorilla/mux v1.8.0
 	github.com/leodido/go-urn v1.2.1 // indirect
+	github.com/lib/pq v1.10.2
 	gopkg.in/go-playground/assert.v1 v1.2.1 // indirect
 )
