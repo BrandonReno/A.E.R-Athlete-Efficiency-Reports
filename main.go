@@ -56,7 +56,8 @@ func main(){
 	l.Println("Shutdown initiated with ", sig_result)
 	services.DBConn.Close() //close database connection
 
-	tc, _ := context.WithTimeout(context.Background(), 30 * time.Second) //Give system 30 seconds to complete handlers
+	tc, cancel := context.WithTimeout(context.Background(), 30 * time.Second) //Give system 30 seconds to complete handlers
+	defer cancel()
 	s.Shutdown(tc) //Shutdown server gracefully
 
 }
