@@ -7,12 +7,9 @@ import (
 	"os"
 	"os/signal"
 	"time"
-
 	"github.com/BrandonReno/A.E.R/data"
 	"github.com/BrandonReno/A.E.R/handlers"
 	"github.com/BrandonReno/A.E.R/routes"
-	"github.com/go-openapi/runtime/middleware"
-	"github.com/gorilla/mux"
 )
 
 const Port = ":9090"
@@ -24,12 +21,12 @@ func main(){
 	
 	wl := handlers.New(l) //Handler for Workout, gets a log to write errors and such
 
-	testRouter := routes.NewRouter(wl)
+	muxRouter := routes.NewRouter(wl)
 
 	//Create the server :"s"
 	s := http.Server{
 		Addr: Port, //Port 9090
-		Handler: testRouter, //Handler is our created mux server_mux
+		Handler: muxRouter, //Handler is our created mux server_mux
 		ReadTimeout: 1 * time.Second, //Read timeout is 1 second
 		WriteTimeout: 1 * time.Second, //Write timeout is 1 second
 		IdleTimeout: 120 * time.Second, //Idle timeout is 120 seconds
