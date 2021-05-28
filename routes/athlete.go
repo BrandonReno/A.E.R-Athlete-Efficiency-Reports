@@ -2,11 +2,11 @@ package routes
 
 import (
 	"net/http"
-	"github.com/BrandonReno/A.E.R/handlers"
+	"github.com/BrandonReno/A.E.R/controllers"
 	"github.com/gorilla/mux"
 )
 
-func initAthleteSR(r *mux.Router, l *handlers.Workout_Log){
+func initAthleteSR(r *mux.Router, l *controllers.Workout_Log){
 	for _, route := range athleteRoutes{
 		sr := r.NewRoute().Subrouter()
 		sr.Methods(route.Request).Path(route.Pattern).Handler(route.Handler)
@@ -20,24 +20,24 @@ var athleteRoutes = Routes{
 	Route{
 		Request: http.MethodGet,
 		Pattern: "/athletes/{athlete_id:[[:alnum:]]+}",
-		Handler: handlers.GetAthlete,
+		Handler: controllers.GetAthlete,
 	},
 
 	Route{
 		Request: http.MethodPost,
 		Pattern: "/athletes",
-		Handler: handlers.CreateAthlete,
+		Handler: controllers.CreateAthlete,
 	},
 
 	Route{
 		Request: http.MethodPut,
 		Pattern: "/athletes/{athlete_id:[[:alnum:]]+}",
-		Handler: handlers.UpdateAthlete,
+		Handler: controllers.UpdateAthlete,
 	},
 
 	Route{
 		Request: http.MethodDelete,
 		Pattern: "/athletes/{athlete_id:[[:alnum:]]+}",
-		Handler: handlers.DeleteAthlete,
+		Handler: controllers.DeleteAthlete,
 	},
 }

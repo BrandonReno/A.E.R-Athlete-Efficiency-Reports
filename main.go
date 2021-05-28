@@ -7,8 +7,8 @@ import (
 	"os"
 	"os/signal"
 	"time"
-	"github.com/BrandonReno/A.E.R/data"
-	"github.com/BrandonReno/A.E.R/handlers"
+	"github.com/BrandonReno/A.E.R/services"
+	"github.com/BrandonReno/A.E.R/controllers"
 	"github.com/BrandonReno/A.E.R/routes"
 )
 
@@ -19,7 +19,7 @@ func main(){
 
 	l := log.New(os.Stdout, "Workout-api", log.LstdFlags) //Create an instance of logger to use for Handlers
 	
-	wl := handlers.New(l) //Handler for Workout, gets a log to write errors and such
+	wl := controllers.New(l) //Handler for Workout, gets a log to write errors and such
 
 	muxRouter := routes.NewRouter(wl)
 
@@ -32,7 +32,7 @@ func main(){
 		IdleTimeout: 120 * time.Second, //Idle timeout is 120 seconds
 	}
 
-	err := data.OpenDBConnection()
+	err := services.OpenDBConnection()
 
 	if err != nil{
 		l.Fatal(err)
@@ -54,7 +54,7 @@ func main(){
 
 	sig_result := <-sigChan //Send channel Signal output to result to log the reasoning for shutdown
 	l.Println("Shutdown initiated with ", sig_result)
-	data.DBConn.Close() //close database connection
+	services.DBConn.Close() //close database connection
 
 	tc, _ := context.WithTimeout(context.Background(), 30 * time.Second) //Give system 30 seconds to complete handlers
 	s.Shutdown(tc) //Shutdown server gracefully

@@ -1,17 +1,19 @@
-package data
+package services
 
-import "fmt"
+import (
+	"fmt"
+	"github.com/BrandonReno/A.E.R/models"
+)
 
-
-func CreateWorkout(w *Workout) error{
+func CreateWorkout(w *models.Workout) error{
 	sqlStatement := `INSERT INTO public.workout(date, description, sport, athlete_id, rating)
 					 VALUES($1, $2, $3, $4, $5);`
 	_, err := DBConn.Exec(sqlStatement,w.Date, w.Description, w.Sport, w.Athlete_ID, w.Rating)
 	return err
 }
 
-func GetUserWorkouts(id string) ([]Workout, error){
-	var wl []Workout
+func GetUserWorkouts(id string) ([]models.Workout, error){
+	var wl []models.Workout
 	sqlStatement := `SELECT workout_id, date, description, sport, rating FROM public.workout WHERE Athlete_ID = $1`
 	rows, err := DBConn.Query(sqlStatement, id)
 	defer rows.Close()
@@ -20,7 +22,7 @@ func GetUserWorkouts(id string) ([]Workout, error){
 		return nil, err
 	} 
 
-	var workout Workout
+	var workout models.Workout
 	for rows.Next(){
 		err := rows.Scan(&workout.Workout_ID, &workout.Date, &workout.Description, &workout.Sport, &workout.Rating)
 		if err != nil{
@@ -40,11 +42,11 @@ func GetUserWorkouts(id string) ([]Workout, error){
 
 var cantFindWorkout error = fmt.Errorf("Can not find workout id in athletes workouts")
 
-func GetSingleWorkout(aid string, wid int) (Workout, error){
+func GetSingleWorkout(aid string, wid int) (models.Workout, error){
 	wl, err := GetUserWorkouts(aid)
 
 	if err != nil{
-		return Workout{}, err
+		return models.Workout{}, err
 	}
 
 	for _, w := range wl{
@@ -53,10 +55,10 @@ func GetSingleWorkout(aid string, wid int) (Workout, error){
 		}
 	}
 
-	return Workout{}, cantFindWorkout
+	return models.Workout{}, cantFindWorkout
 }
 
-func UpdateWorkout(w *Workout) error{
+func UpdateWorkout(w *models.Workout) error{
 	sqlStatement := `UPDATE public.workout 
 					SET Date = $1,
 						Description = $2,

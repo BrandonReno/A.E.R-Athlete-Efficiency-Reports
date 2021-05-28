@@ -1,12 +1,13 @@
-package data
+package services
 
 import (
 	"math/rand"
 	"time"
+	"github.com/BrandonReno/A.E.R/models"
 )
 
 const charset = "abcdefghijklmnopqrstuvwxyz" +
-	"ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+  "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
 
 var seededRand *rand.Rand = rand.New(
 	rand.NewSource(time.Now().UnixNano()))
@@ -14,18 +15,18 @@ var seededRand *rand.Rand = rand.New(
 func GenerateID(length int, charset string) string {
 	id := make([]byte, length)
 	for i := range id {
-		id[i] = charset[seededRand.Intn(len(charset))]
+	  id[i] = charset[seededRand.Intn(len(charset))]
 	}
 	return string(id)
-}
+  }
 
-func GetDate() string {
+func GetDate() string{
 	current := time.Now()
-	date := time.Date(current.Year(), current.Month(), current.Day(), 0, 0, 0, 0, current.Location())
+	date := time.Date(current.Year(), current.Month(), current.Day(),0,0,0,0, current.Location())
 	return date.String()
 }
 
-func AddAthlete(a *Athlete) error {
+func AddAthlete(a *models.Athlete) error{
 	id := GenerateID(10, charset)
 	current_date := GetDate()
 	sqlStatement := `INSERT INTO public.athlete VALUES($1, $2, $3, $4, $5);`
@@ -33,20 +34,20 @@ func AddAthlete(a *Athlete) error {
 	return err
 }
 
-func GetAthlete(id string) (Athlete, error) {
-	var athlete Athlete
+func GetAthlete(id string) (models.Athlete, error){
+	var athlete models.Athlete
 	sqlStatement := `SELECT * FROM public.athlete WHERE Athlete_ID = $1;`
 	row := DBConn.QueryRow(sqlStatement, id)
 	err := row.Scan(&athlete.Athlete_ID, &athlete.First_Name, &athlete.Last_Name, &athlete.Age, &athlete.Joined)
 
-	if err != nil {
-		return Athlete{}, err
+	if err != nil{
+		return models.Athlete{},err
 	}
 
 	return athlete, nil
 }
 
-func UpdateAthlete(a *Athlete) error {
+func UpdateAthlete(a *models.Athlete) error{
 	sqlStatement := `UPDATE public.athlete 
 					SET First_Name = $1,
 						Last_Name = $2,
@@ -56,7 +57,7 @@ func UpdateAthlete(a *Athlete) error {
 	return err
 }
 
-func DeleteAthlete(aid string) error {
+func DeleteAthlete(aid string) error{
 	sqlStatement := `DELETE FROM public.athlete WHERE Athlete_ID = $1`
 	_, err := DBConn.Exec(sqlStatement, aid)
 	return err

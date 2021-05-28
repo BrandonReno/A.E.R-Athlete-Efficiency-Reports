@@ -1,6 +1,6 @@
 package docs
 
-import "github.com/BrandonReno/A.E.R/data"
+import "github.com/BrandonReno/A.E.R/models"
 
 // The ID number of the workout to be deleted
 // swagger:parameters deleteWorkout updateWorkout getWorkout
@@ -16,5 +16,5 @@ type WorkoutIDParameterWrapper struct{
 type RequestWorkoutWrapper struct{
 	//	in: body
 	//	required: True
-	Body []data.Workout
+	Body []models.Workout
 }

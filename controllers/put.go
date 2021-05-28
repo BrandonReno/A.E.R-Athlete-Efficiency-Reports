@@ -1,10 +1,10 @@
-package handlers
+package controllers
 
 import (
 	"fmt"
 	"net/http"
-
-	"github.com/BrandonReno/A.E.R/data"
+	"github.com/BrandonReno/A.E.R/models"
+	"github.com/BrandonReno/A.E.R/services"
 )
 
 // Update a workout in the database
@@ -26,7 +26,7 @@ func UpdateWorkout(rw http.ResponseWriter, r *http.Request) {
 	//			201 : noContent
 	//			400 : verror
 	//			404 : badRequest		
-    workout := r.Context().Value(KeyCtx{}).(data.Workout)
+    workout := r.Context().Value(KeyCtx{}).(models.Workout)
 	wid, err := getWorkoutID(r)
 
 	if err != nil{
@@ -35,7 +35,7 @@ func UpdateWorkout(rw http.ResponseWriter, r *http.Request) {
 	}
 
 	workout.Workout_ID = wid
-	err = data.UpdateWorkout(&workout)
+	err = services.UpdateWorkout(&workout)
 
 	if err != nil{
 		http.Error(rw, fmt.Sprintf("Error updating workout: %s", err), http.StatusInternalServerError)
@@ -48,9 +48,9 @@ func UpdateAthlete(rw http.ResponseWriter, r *http.Request){
 
 	//swagger
 	athlete_id := getAthleteID(r)
-	athlete := r.Context().Value(KeyCtx{}).(data.Athlete)
+	athlete := r.Context().Value(KeyCtx{}).(models.Athlete)
 	athlete.Athlete_ID = athlete_id
-	err := data.UpdateAthlete(&athlete)
+	err := services.UpdateAthlete(&athlete)
 	if err != nil{
 		http.Error(rw, fmt.Sprintf("Error in updating athlete: %s", err), http.StatusBadRequest)
 		return

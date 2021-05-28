@@ -1,19 +1,19 @@
 package docs
 
-import "github.com/BrandonReno/A.E.R/data"
+import "github.com/BrandonReno/A.E.R/models"
 
 //A list of workouts returns in the response
 // swagger:response workoutsResponse
 type workoutsResponseWrapper struct{
 	//	in:body
-		body []data.Workout
+		body []models.Workout
 }
 
 //A single workout returns in the response
 // swagger:response singleWorkout
 type singleWorkoutResponseWrapper struct{
 	// in: body
-	Body data.Workout
+	Body models.Workout
 }
 
 

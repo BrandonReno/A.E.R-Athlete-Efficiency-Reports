@@ -1,9 +1,9 @@
-package handlers
+package controllers
 
 import (
 	"fmt"
 	"net/http"
-	"github.com/BrandonReno/A.E.R/data"
+	"github.com/BrandonReno/A.E.R/services"
 )
 
 // Delete a workout from the database
@@ -24,7 +24,7 @@ func DeleteWorkout(rw http.ResponseWriter, r *http.Request){
 		return
 	}
 
-	err = data.DeleteWorkout(athlete_id, workout_id)
+	err = services.DeleteWorkout(athlete_id, workout_id)
 	if err != nil{
 		http.Error(rw, fmt.Sprintf("Error in deleting workout: %s", err), http.StatusBadRequest)
 		return
@@ -38,7 +38,7 @@ func DeleteAthlete(rw http.ResponseWriter, r *http.Request){
 	//swagger
 
 	athlete_id := getAthleteID(r)
-	err := data.DeleteAthlete(athlete_id)
+	err := services.DeleteAthlete(athlete_id)
 	if err != nil{
 		http.Error(rw, fmt.Sprintf("Error deleting athlete: %s", err), http.StatusBadRequest)
 		return

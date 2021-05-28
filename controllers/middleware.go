@@ -1,8 +1,8 @@
-package handlers
+package controllers
 
 import(
 	"net/http"
-	"github.com/BrandonReno/A.E.R/data"
+	"github.com/BrandonReno/A.E.R/models"
 	"fmt"
 	"context"
 )
@@ -10,8 +10,8 @@ import(
 //Middleware below, called before the subrouters handlerfunc. Example, when subrouter matches a POST verb middleware is called and then post
 func (w *Workout_Log) MiddlewareWorkoutValidation(next http.Handler) http.Handler{ 
 	return http.HandlerFunc(func(rw http.ResponseWriter, r *http.Request){ 
-		workout := data.Workout{} //Create a blank Workout 
-		err := data.FromJSON(&workout, r.Body) //using the io reader of the request body read the json r.body and decode it to a workout.
+		workout := models.Workout{} //Create a blank Workout 
+		err := FromJSON(&workout, r.Body) //using the io reader of the request body read the json r.body and decode it to a workout.
 		
 		ID := getAthleteID(r)
 		workout.Athlete_ID = ID
@@ -38,8 +38,8 @@ func (w *Workout_Log) MiddlewareWorkoutValidation(next http.Handler) http.Handle
 
 func (w *Workout_Log) MiddlewarAthleteValidation(next http.Handler) http.Handler{ 
 	return http.HandlerFunc(func(rw http.ResponseWriter, r *http.Request){ 
-		athlete := data.Athlete{} //Create a blank athlete 
-		err := data.FromJSON(&athlete, r.Body) //using the io reader of the request body read the json r.body and decode it to an athlete.
+		athlete := models.Athlete{} //Create a blank athlete 
+		err := FromJSON(&athlete, r.Body) //using the io reader of the request body read the json r.body and decode it to an athlete.
 		
 		if err != nil{ // if an error occurs while deserializing the athlete from json print to the log and raise the http error
 			w.l.Println("Error deserializing product")

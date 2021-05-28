@@ -2,7 +2,7 @@ package routes
 
 import (
 	"net/http"
-	"github.com/BrandonReno/A.E.R/handlers"
+	"github.com/BrandonReno/A.E.R/controllers"
 	"github.com/go-openapi/runtime/middleware"
 	"github.com/gorilla/mux"
 )
@@ -16,7 +16,7 @@ type Route struct {
 
 type Routes []Route
 
-func NewRouter(l *handlers.Workout_Log) *mux.Router{
+func NewRouter(l *controllers.Workout_Log) *mux.Router{
 	serve_mux := mux.NewRouter()
 	initAthleteSR(serve_mux, l)
 	initWorkoutSR(serve_mux, l)
