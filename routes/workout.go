@@ -47,3 +47,5 @@ var workoutRoutes = Routes{
 		Handler: handlers.DeleteWorkout,
 	},
 }
+
+	
