@@ -40,8 +40,6 @@ func (w *Workout_Log) MiddlewarAthleteValidation(next http.Handler) http.Handler
 	return http.HandlerFunc(func(rw http.ResponseWriter, r *http.Request){ 
 		athlete := data.Athlete{} //Create a blank athlete 
 		err := data.FromJSON(&athlete, r.Body) //using the io reader of the request body read the json r.body and decode it to an athlete.
-
-		fmt.Printf("%+v", athlete)
 		
 		if err != nil{ // if an error occurs while deserializing the athlete from json print to the log and raise the http error
 			w.l.Println("Error deserializing product")

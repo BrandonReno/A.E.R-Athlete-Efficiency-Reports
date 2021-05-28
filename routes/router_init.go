@@ -2,6 +2,7 @@ package routes
 
 import (
 	"net/http"
+	"github.com/BrandonReno/A.E.R/handlers"
 	"github.com/gorilla/mux"
 )
 
@@ -12,8 +13,11 @@ type Route struct {
 	Handler http.HandlerFunc
 }
 
-func NewRouter() mux.Router{
+type Routes []Route
+
+func NewRouter(l *handlers.Workout_Log) *mux.Router{
 	serve_mux := mux.NewRouter()
-
-
+	initAthleteSR(serve_mux, l)
+	initWorkoutSR(serve_mux, l)
+	return serve_mux
 }
