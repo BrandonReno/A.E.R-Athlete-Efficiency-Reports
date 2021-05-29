@@ -15,9 +15,14 @@ RUN go get -d -v
 #Compile the server
 RUN go build -o /go/bin/AERserver
 
+#Multi image build, build from scratch
 FROM scratch
+
+# copy from the base image just the executable to scratch
 COPY --from=Base /go/bin/AERserver go/bin/AERserver
 
+#expose the port to view and test
 EXPOSE 9090
 
+#run the executable file
 CMD [ "go/bin/AERserver" ]
