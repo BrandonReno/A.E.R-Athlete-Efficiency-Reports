@@ -3,24 +3,19 @@ package services
 import (
 	"database/sql"
 	"fmt"
+
 	_ "github.com/lib/pq"
 )
 
 var DBConn *sql.DB
 
-const(
-	host = "localhost"
-	port = 5432
-	user = "postgres"
-	password = "renol114"
-	db = "A.E.R"
-)
 
-func OpenDBConnection() error{
+func OpenDBConnection(user, password, host, port, db string) error {
 	var err error
-	connectionString := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable", host, port, user, password, db)
+	connStr := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable", host, port, user, password, db)
 
-	DBConn, err = sql.Open("postgres", connectionString)
+
+	DBConn, err = sql.Open("postgres", connStr)
 
 	return err
 }

@@ -7,13 +7,12 @@ import (
 	"os"
 	"os/signal"
 	"time"
-	"github.com/BrandonReno/A.E.R/services"
 	"github.com/BrandonReno/A.E.R/controllers"
 	"github.com/BrandonReno/A.E.R/routes"
+	"github.com/BrandonReno/A.E.R/services"
 )
 
 const Port = ":9090"
-
 
 func main(){
 
@@ -32,8 +31,16 @@ func main(){
 		IdleTimeout: 120 * time.Second, //Idle timeout is 120 seconds
 	}
 
-	err := services.OpenDBConnection()
+	db_user, db_pass, db_host, db_port, db_db :=
+										os.Getenv("POSTGRES_USER"),
+										os.Getenv("POSTGRES_PASSWORD"),
+										os.Getenv("POSTGRES_HOST"),
+										os.Getenv("POSTGRES_PORT"),
+										os.Getenv("POSTGRES_DB")
 
+	l.Println(db_user, db_pass, db_host, db_port)
+
+	err := services.OpenDBConnection(db_user, db_pass, db_host, db_port)
 	if err != nil{
 		l.Fatal(err)
 	}

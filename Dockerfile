@@ -1,28 +1,48 @@
-FROM golang:alpine as Base
+# Start from golang base image
+FROM golang:alpine as builder
 
-#Download git for go get to grab dependencies
+# Add Maintainer info
+LABEL maintainer="Brandon Reno <b_reno@u.pacific.edu>"
+
+# Install git.
 RUN apk update && apk add --no-cache git
 
-#Set the working directory in the container
-WORKDIR GOPATH$/src/AERpkg/A.E.R/
+# Set the current working directory inside the container 
+RUN mkdir /aer
 
-#Copy everything from the local dir into the workdir
+WORKDIR /aer
+
+# Copy go mod and sum files to the working directory
+COPY go.mod go.sum ./
+
+# Download all dependencies using go mod
+RUN go mod download 
+
+#copy everything from the current working directory into the containers working directory
 COPY . .
 
-#Get all the dependencies
-RUN go get -d -v
+# Build the Go app as 'main.cgo'
+RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o main .
 
-#Compile the server
-RUN go build -o /go/bin/AERserver
 
-#Multi image build, build from scratch
-FROM scratch
 
-# copy from the base image just the executable to scratch
-COPY --from=Base /go/bin/AERserver go/bin/AERserver
 
-#expose the port to view and test
+
+
+# Create a new image from scratch
+FROM alpine:latest
+RUN apk --no-cache add ca-certificates
+
+WORKDIR /root/
+
+# Copy the prebuilt main executable from the previous image to the new images working dir
+COPY --from=builder /aer/main .    
+
+# Create a directory to hold the volumes
+RUN mkdir ./volumes/
+
+# Expose port 9090 for documentation
 EXPOSE 9090
 
-#run the executable file
-CMD [ "go/bin/AERserver" ]
+# Command to run the executable when containerized
+ENTRYPOINT ["./main"]
