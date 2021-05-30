@@ -5,7 +5,7 @@ services:
     container_name: pg_db
     environment:
       - POSTGRES_USER=postgres 
-      - POSTGRES_PASS=renol114
+      - POSTGRES_PASSWORD=renol114
       - POSTGRES_DB=A.E.R
     ports:
       - "5432:5432"
