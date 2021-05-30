@@ -47,6 +47,31 @@ func GetAthlete(id string) (models.Athlete, error){
 	return athlete, nil
 }
 
+func GetAllAthletes() ([]models.Athlete, error){
+	sqlStatement := `SELECT * FROM public.athlete;`
+	rows, err := DBConn.Query(sqlStatement)
+	defer rows.Close()
+
+	if err != nil{
+		return nil,err
+	}
+
+	var al []models.Athlete
+	var athlete models.Athlete
+	for rows.Next(){
+		err := rows.Scan(&athlete.Athlete_ID, &athlete.First_Name, &athlete.Last_Name, &athlete.Age, &athlete.Joined)
+		if err != nil{
+			return nil, err
+		}
+		al = append(al, athlete)
+	}
+	err = rows.Err()
+	if err != nil{
+		return nil, err
+	}
+	return al, nil
+}
+
 func UpdateAthlete(a *models.Athlete) error{
 	sqlStatement := `UPDATE public.athlete 
 					SET First_Name = $1,

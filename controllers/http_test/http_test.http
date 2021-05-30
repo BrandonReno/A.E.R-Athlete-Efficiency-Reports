@@ -24,6 +24,8 @@ PUT http://localhost:9090/workouts/uf23b/4
 
 GET http://localhost:9090/athletes/5phOA2wkBb
 
+GET http://localhost:9090/athletes
+
 POST http://localhost:9090/athletes
 
 {

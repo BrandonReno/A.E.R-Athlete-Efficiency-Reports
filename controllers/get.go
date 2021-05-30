@@ -74,3 +74,17 @@ func GetAthlete(rw http.ResponseWriter, r *http.Request){
 	}
 	ToJSON(athlete, rw)
 }
+
+func GetAllAthletes(rw http.ResponseWriter, r *http.Request){
+
+	//swagger here
+
+	athletes, err := services.GetAllAthletes()
+	if err != nil{
+		http.Error(rw, fmt.Sprintf("Error getting all athletes: %s", err), http.StatusBadRequest)
+		return
+	}
+	ToJSON(athletes, rw)
+
+	
+}

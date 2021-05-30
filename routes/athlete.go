@@ -40,4 +40,10 @@ var athleteRoutes = Routes{
 		Pattern: "/athletes/{athlete_id:[[:alnum:]]+}",
 		Handler: controllers.DeleteAthlete,
 	},
+
+	Route{
+		Request: http.MethodGet,
+		Pattern: "/athletes",
+		Handler: controllers.GetAllAthletes,
+	},
 }
