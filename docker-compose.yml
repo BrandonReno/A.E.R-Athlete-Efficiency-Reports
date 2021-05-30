@@ -4,10 +4,8 @@ services:
     image: postgres
     container_name: pg_db
     environment:
-      - POSTGRES_HOST=postgres
       - POSTGRES_USER=postgres 
       - POSTGRES_PASS=renol114
-      - POSTGRES_PORT=5432
       - POSTGRES_DB=A.E.R
     ports:
       - "5432:5432"
@@ -18,11 +16,12 @@ services:
     build: 
       context: .
     container_name: aer_app
-    environment: 
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=renol114
+    environment:
+      - POSTGRES_HOST=db
+      - POSTGRES_USER=postgres 
+      - POSTGRES_PASS=renol114
+      - POSTGRES_PORT=5432
       - POSTGRES_DB=A.E.R 
-      - POSTGRES_HOST=pg_db
     ports: 
       - "9090:9090"
     volumes: 

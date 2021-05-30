@@ -15,7 +15,6 @@ func OpenDBConnection(user, password, host, db, port string) error {
 
 	connStr := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable", host, port, user, password, db)
 
-
 	DBConn, err = sql.Open("postgres", connStr)
 
 	return err
