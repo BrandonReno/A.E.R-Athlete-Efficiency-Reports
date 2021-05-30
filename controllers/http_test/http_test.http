@@ -22,9 +22,9 @@ PUT http://localhost:9090/workouts/uf23b/4
     "rating": 3
 }
 
-GET http://localhost:9090/athletes/R5HYMiks5d
+GET http://localhost:9090/athletes/5phOA2wkBb
 
-POST http://localhost:9090/athlete
+POST http://localhost:9090/athletes
 
 {
     "first_name": "Erik",
