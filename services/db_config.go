@@ -10,8 +10,9 @@ import (
 var DBConn *sql.DB
 
 
-func OpenDBConnection(user, password, host, port, db string) error {
+func OpenDBConnection(user, password, host, db, port string) error {
 	var err error
+
 	connStr := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable", host, port, user, password, db)
 
 

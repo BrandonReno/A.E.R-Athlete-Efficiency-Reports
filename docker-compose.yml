@@ -7,6 +7,7 @@ services:
       - POSTGRES_HOST=postgres
       - POSTGRES_USER=postgres 
       - POSTGRES_PASS=renol114
+      - POSTGRES_PORT=5432
       - POSTGRES_DB=A.E.R
     ports:
       - "5432:5432"
@@ -14,7 +15,8 @@ services:
       - database_postgres:/var/lib/postgresql/data
 
   app:
-    build: .
+    build: 
+      context: .
     container_name: aer_app
     environment: 
       - POSTGRES_USER=postgres
