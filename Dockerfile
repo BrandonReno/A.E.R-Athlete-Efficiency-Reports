@@ -41,6 +41,10 @@ COPY --from=builder /aer/main .
 # Create a directory to hold the volumes
 RUN mkdir ./volumes/
 
+RUN mkdir ./docs/
+
+COPY --from=builder /aer/docs/swagger.yaml ./docs
+
 # Expose port 9090 for documentation
 EXPOSE 9090
 

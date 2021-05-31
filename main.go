@@ -45,6 +45,7 @@ func main() {
 		IdleTimeout:  120 * time.Second, //Idle timeout is 120 seconds
 	}
 
+	l.Println("Server is up and running")
 	// Listen and serve in a go routine to allow for graceful shutdown
 	go func() {
 		err := s.ListenAndServe()
@@ -62,6 +63,7 @@ func main() {
 	sig_result := <-sigChan //Send channel Signal output to result to log the reasoning for shutdown
 	l.Println("Shutdown initiated with ", sig_result)
 	db.CloseDBConnection() //close database connection
+	l.Println("Postgres connecttion successfully closed")
 
 	tc, cancel := context.WithTimeout(context.Background(), 30*time.Second) //Give system 30 seconds to complete handlers
 	defer cancel()
