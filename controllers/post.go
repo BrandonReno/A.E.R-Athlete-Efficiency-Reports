@@ -8,7 +8,7 @@ import (
 
 // Add a workout to the database
 func (l *Aer_Log) AddWorkout(rw http.ResponseWriter, r *http.Request){
-	// swagger:route POST /workouts workouts addWorkout
+	// swagger:route POST /athleteID{aid} workouts addWorkout
     //
     // Adds a new workout to the database
     //

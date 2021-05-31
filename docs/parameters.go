@@ -3,7 +3,7 @@ package docs
 import "github.com/BrandonReno/A.E.R/models"
 
 // The ID number of the workout to be deleted
-// swagger:parameters deleteWorkout updateWorkout getWorkout
+// swagger:parameters deleteWorkout updateWorkout getSingleWorkout
 type WorkoutIDParameterWrapper struct {
 	//	in: path
 	//	required: True
@@ -12,7 +12,7 @@ type WorkoutIDParameterWrapper struct {
 }
 
 // The unique athlete ID which distinguishes athletes
-// swagger:parameters getSingleWorkout getAthlete deleteAthlete updateAthlete updateWorkout
+// swagger:parameters getSingleWorkout getAthlete deleteAthlete updateAthlete updateWorkout addWorkout deleteWorkout
 type AthleteIDParameterWrapper struct {
 	//	in:path
 	//	required: true
@@ -29,7 +29,7 @@ type RequestWorkoutWrapper struct {
 }
 
 // The parameters to be filled out when creating an athlete
-// swagger:parameters addAthlete
+// swagger:parameters addAthlete updateAthlete
 type RequestAthleteWrapper struct {
 	//	in: body
 	//	required: true

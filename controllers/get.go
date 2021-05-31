@@ -106,7 +106,7 @@ func (l *Aer_Log) GetAthlete(rw http.ResponseWriter, r *http.Request) {
 
 // Gets all athletes registered in the system
 func (l *Aer_Log) GetAllAthletes(rw http.ResponseWriter, r *http.Request) {
-	// swagger:route GET / athletes listathletes
+	// swagger:route GET / athletes listAthletes
 	//
 	// Lists all athletes registered in the system
 	//

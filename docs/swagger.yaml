@@ -79,7 +79,7 @@ paths:
   /:
     get:
       description: Lists all athletes registered in the system
-      operationId: listathletes
+      operationId: listAthletes
       produces:
       - application/json
       responses:
@@ -89,6 +89,32 @@ paths:
       - http
       tags:
       - athletes
+  /athleteID{aid}:
+    post:
+      consumes:
+      - application/json
+      description: Adds a new workout to the database
+      operationId: addWorkout
+      parameters:
+      - example: H3bfj78eHe
+        in: path
+        name: athlete_id
+        required: true
+        type: string
+        x-go-name: ID
+      - in: body
+        name: Body
+        schema:
+          $ref: '#/definitions/Workout'
+      responses:
+        "201":
+          $ref: '#/responses/noContent'
+        "400":
+          $ref: '#/responses/verror'
+      schemes:
+      - http
+      tags:
+      - workouts
   /athletes:
     post:
       consumes:
@@ -162,6 +188,11 @@ paths:
         required: true
         type: string
         x-go-name: ID
+      - in: body
+        name: Body
+        required: true
+        schema:
+          $ref: '#/definitions/Athlete'
       produces:
       - application/json
       responses:
@@ -175,31 +206,18 @@ paths:
       - http
       tags:
       - athletes
-  /workouts:
-    post:
-      consumes:
-      - application/json
-      description: Adds a new workout to the database
-      operationId: addWorkout
-      parameters:
-      - in: body
-        name: Body
-        schema:
-          $ref: '#/definitions/Workout'
-      responses:
-        "201":
-          $ref: '#/responses/noContent'
-        "400":
-          $ref: '#/responses/verror'
-      schemes:
-      - http
-      tags:
-      - workouts
   /workouts/athleteID{aid}/workoutID{ID}:
     get:
       description: Gets a single workout from a specified athlete
       operationId: getSingleWorkout
       parameters:
+      - example: 374638
+        format: int64
+        in: path
+        name: workout_id
+        required: true
+        type: integer
+        x-go-name: ID
       - example: H3bfj78eHe
         in: path
         name: athlete_id
@@ -262,6 +280,12 @@ paths:
         name: workout_id
         required: true
         type: integer
+        x-go-name: ID
+      - example: H3bfj78eHe
+        in: path
+        name: athlete_id
+        required: true
+        type: string
         x-go-name: ID
       responses:
         "201":
