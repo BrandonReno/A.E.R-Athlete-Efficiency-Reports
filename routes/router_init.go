@@ -17,6 +17,7 @@ type Route struct {
 
 type Routes []Route
 
+
 func NewRouter(l *controllers.Aer_Log) *mux.Router{
 	serve_mux := mux.NewRouter()
 	initAthleteSR(serve_mux, l)
