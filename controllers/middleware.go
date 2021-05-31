@@ -8,7 +8,7 @@ import(
 )
 
 //Middleware below, called before the subrouters handlerfunc. Example, when subrouter matches a POST verb middleware is called and then post
-func (w *Workout_Log) MiddlewareWorkoutValidation(next http.Handler) http.Handler{ 
+func (w *Aer_Log) MiddlewareWorkoutValidation(next http.Handler) http.Handler{ 
 	return http.HandlerFunc(func(rw http.ResponseWriter, r *http.Request){ 
 		workout := models.Workout{} //Create a blank Workout 
 		err := FromJSON(&workout, r.Body) //using the io reader of the request body read the json r.body and decode it to a workout.
@@ -36,7 +36,7 @@ func (w *Workout_Log) MiddlewareWorkoutValidation(next http.Handler) http.Handle
 	})
 }
 
-func (w *Workout_Log) MiddlewarAthleteValidation(next http.Handler) http.Handler{ 
+func (w *Aer_Log) MiddlewarAthleteValidation(next http.Handler) http.Handler{ 
 	return http.HandlerFunc(func(rw http.ResponseWriter, r *http.Request){ 
 		athlete := models.Athlete{} //Create a blank athlete 
 		err := FromJSON(&athlete, r.Body) //using the io reader of the request body read the json r.body and decode it to an athlete.

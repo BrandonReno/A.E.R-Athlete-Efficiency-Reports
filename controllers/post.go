@@ -4,11 +4,10 @@ import (
 	"fmt"
 	"net/http"
 	"github.com/BrandonReno/A.E.R/models"
-	"github.com/BrandonReno/A.E.R/services"
 )
 
 // Add a workout to the database
-func AddWorkout(rw http.ResponseWriter, r *http.Request){
+func (l *Aer_Log) AddWorkout(rw http.ResponseWriter, r *http.Request){
 	// swagger:route POST /workouts workouts addWorkout
     //
     // Adds a new workout to the database
@@ -23,7 +22,7 @@ func AddWorkout(rw http.ResponseWriter, r *http.Request){
 	//			400 : verror
 
 	workout := r.Context().Value(KeyCtx{}).(models.Workout)
-	err := services.CreateWorkout(&workout)
+	err := l.db.CreateWorkout(&workout)
 	if err != nil{
 		http.Error(rw, fmt.Sprintf("Error in creating workout: %s", err), http.StatusInternalServerError)
 		return
@@ -32,12 +31,12 @@ func AddWorkout(rw http.ResponseWriter, r *http.Request){
 
 }
 
-func CreateAthlete(rw http.ResponseWriter, r *http.Request){
+func (l *Aer_Log) CreateAthlete(rw http.ResponseWriter, r *http.Request){
 
 	//swagger
 
 	athlete := r.Context().Value(KeyCtx{}).(models.Athlete)
-	err := services.AddAthlete(&athlete)
+	err := l.db.AddAthlete(&athlete)
 
 	if err != nil{
 		http.Error(rw, fmt.Sprintf("Error in creating athlete: %s", err), http.StatusBadRequest)

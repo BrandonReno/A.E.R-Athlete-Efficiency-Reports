@@ -9,6 +9,7 @@ import (
 
 //Create type route to then create subroutes for athlete and workout
 type Route struct {
+	log *controllers.Aer_Log
 	Request string
 	Pattern string
 	Handler http.HandlerFunc
@@ -16,7 +17,7 @@ type Route struct {
 
 type Routes []Route
 
-func NewRouter(l *controllers.Workout_Log) *mux.Router{
+func NewRouter(l *controllers.Aer_Log) *mux.Router{
 	serve_mux := mux.NewRouter()
 	initAthleteSR(serve_mux, l)
 	initWorkoutSR(serve_mux, l)

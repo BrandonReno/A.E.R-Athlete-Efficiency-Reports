@@ -3,11 +3,10 @@ package controllers
 import (
 	"fmt"
 	"net/http"
-	"github.com/BrandonReno/A.E.R/services"
 )
 
 // Delete a workout from the database
-func DeleteWorkout(rw http.ResponseWriter, r *http.Request){
+func (l * Aer_Log) DeleteWorkout(rw http.ResponseWriter, r *http.Request){
 	// swagger:route DELETE /workouts/wid{id} workouts deleteWorkout
     //
     // Deletes a specified workout by id
@@ -24,7 +23,7 @@ func DeleteWorkout(rw http.ResponseWriter, r *http.Request){
 		return
 	}
 
-	err = services.DeleteWorkout(athlete_id, workout_id)
+	err = l.db.DeleteWorkout(athlete_id, workout_id)
 	if err != nil{
 		http.Error(rw, fmt.Sprintf("Error in deleting workout: %s", err), http.StatusBadRequest)
 		return
@@ -32,13 +31,13 @@ func DeleteWorkout(rw http.ResponseWriter, r *http.Request){
 }
 
 
-func DeleteAthlete(rw http.ResponseWriter, r *http.Request){
+func (l * Aer_Log) DeleteAthlete(rw http.ResponseWriter, r *http.Request){
 
 
 	//swagger
 
 	athlete_id := getAthleteID(r)
-	err := services.DeleteAthlete(athlete_id)
+	err := l.db.DeleteAthlete(athlete_id)
 	if err != nil{
 		http.Error(rw, fmt.Sprintf("Error deleting athlete: %s", err), http.StatusBadRequest)
 		return

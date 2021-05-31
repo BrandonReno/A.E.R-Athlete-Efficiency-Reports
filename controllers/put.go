@@ -4,11 +4,10 @@ import (
 	"fmt"
 	"net/http"
 	"github.com/BrandonReno/A.E.R/models"
-	"github.com/BrandonReno/A.E.R/services"
 )
 
 // Update a workout in the database
-func UpdateWorkout(rw http.ResponseWriter, r *http.Request) {
+func (l *Aer_Log) UpdateWorkout(rw http.ResponseWriter, r *http.Request) {
 
 	// swagger:route PUT /workouts/wid{id} workouts updateWorkout
     //
@@ -35,7 +34,7 @@ func UpdateWorkout(rw http.ResponseWriter, r *http.Request) {
 	}
 
 	workout.Workout_ID = wid
-	err = services.UpdateWorkout(&workout)
+	err = l.db.UpdateWorkout(&workout)
 
 	if err != nil{
 		http.Error(rw, fmt.Sprintf("Error updating workout: %s", err), http.StatusInternalServerError)
@@ -43,14 +42,14 @@ func UpdateWorkout(rw http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func UpdateAthlete(rw http.ResponseWriter, r *http.Request){
+func (l *Aer_Log) UpdateAthlete(rw http.ResponseWriter, r *http.Request){
 
 
 	//swagger
 	athlete_id := getAthleteID(r)
 	athlete := r.Context().Value(KeyCtx{}).(models.Athlete)
 	athlete.Athlete_ID = athlete_id
-	err := services.UpdateAthlete(&athlete)
+	err := l.db.UpdateAthlete(&athlete)
 	if err != nil{
 		http.Error(rw, fmt.Sprintf("Error in updating athlete: %s", err), http.StatusBadRequest)
 		return

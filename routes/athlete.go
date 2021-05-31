@@ -6,7 +6,8 @@ import (
 	"github.com/gorilla/mux"
 )
 
-func initAthleteSR(r *mux.Router, l *controllers.Workout_Log){
+func initAthleteSR(r *mux.Router, l *controllers.Aer_Log){
+	athleteRoutes := initAthleteSlice(l)
 	for _, route := range athleteRoutes{
 		sr := r.NewRoute().Subrouter()
 		sr.Methods(route.Request).Path(route.Pattern).Handler(route.Handler)
@@ -16,34 +17,37 @@ func initAthleteSR(r *mux.Router, l *controllers.Workout_Log){
 	}
 }
 
-var athleteRoutes = Routes{
-	Route{
-		Request: http.MethodGet,
-		Pattern: "/athletes/{athlete_id:[[:alnum:]]+}",
-		Handler: controllers.GetAthlete,
-	},
+func initAthleteSlice(l *controllers.Aer_Log) Routes{
+	athleteRoutes := Routes{
+		Route{
+			Request: http.MethodGet,
+			Pattern: "/athletes/{athlete_id:[[:alnum:]]+}",
+			Handler: l.GetAthlete,
+		},
 
-	Route{
-		Request: http.MethodPost,
-		Pattern: "/athletes",
-		Handler: controllers.CreateAthlete,
-	},
+		Route{
+			Request: http.MethodPost,
+			Pattern: "/athletes",
+			Handler: l.CreateAthlete,
+		},
 
-	Route{
-		Request: http.MethodPut,
-		Pattern: "/athletes/{athlete_id:[[:alnum:]]+}",
-		Handler: controllers.UpdateAthlete,
-	},
+		Route{
+			Request: http.MethodPut,
+			Pattern: "/athletes/{athlete_id:[[:alnum:]]+}",
+			Handler: l.UpdateAthlete,
+		},
 
-	Route{
-		Request: http.MethodDelete,
-		Pattern: "/athletes/{athlete_id:[[:alnum:]]+}",
-		Handler: controllers.DeleteAthlete,
-	},
+		Route{
+			Request: http.MethodDelete,
+			Pattern: "/athletes/{athlete_id:[[:alnum:]]+}",
+			Handler: l.DeleteAthlete,
+		},
 
-	Route{
-		Request: http.MethodGet,
-		Pattern: "/athletes",
-		Handler: controllers.GetAllAthletes,
-	},
+		Route{
+			Request: http.MethodGet,
+			Pattern: "/athletes",
+			Handler: l.GetAllAthletes,
+		},
+	}
+	return athleteRoutes
 }

@@ -26,18 +26,18 @@ func GetDate() string{
 	return date.String()
 }
 
-func AddAthlete(a *models.Athlete) error{
+func (d *DB) AddAthlete(a *models.Athlete) error{
 	id := GenerateID(10, charset)
 	current_date := GetDate()
 	sqlStatement := `INSERT INTO public.athlete VALUES($1, $2, $3, $4, $5);`
-	_, err := DBConn.Exec(sqlStatement, id, a.First_Name, a.Last_Name, a.Age, current_date)
+	_, err := d.DBConn.Exec(sqlStatement, id, a.First_Name, a.Last_Name, a.Age, current_date)
 	return err
 }
 
-func GetAthlete(id string) (models.Athlete, error){
+func (d *DB) GetAthlete(id string) (models.Athlete, error){
 	var athlete models.Athlete
 	sqlStatement := `SELECT * FROM public.athlete WHERE Athlete_ID = $1;`
-	row := DBConn.QueryRow(sqlStatement, id)
+	row := d.DBConn.QueryRow(sqlStatement, id)
 	err := row.Scan(&athlete.Athlete_ID, &athlete.First_Name, &athlete.Last_Name, &athlete.Age, &athlete.Joined)
 
 	if err != nil{
@@ -47,9 +47,9 @@ func GetAthlete(id string) (models.Athlete, error){
 	return athlete, nil
 }
 
-func GetAllAthletes() ([]models.Athlete, error){
+func (d *DB) GetAllAthletes() ([]models.Athlete, error){
 	sqlStatement := `SELECT * FROM public.athlete;`
-	rows, err := DBConn.Query(sqlStatement)
+	rows, err := d.DBConn.Query(sqlStatement)
 	defer rows.Close()
 
 	if err != nil{
@@ -72,18 +72,18 @@ func GetAllAthletes() ([]models.Athlete, error){
 	return al, nil
 }
 
-func UpdateAthlete(a *models.Athlete) error{
+func (d *DB) UpdateAthlete(a *models.Athlete) error{
 	sqlStatement := `UPDATE public.athlete 
 					SET First_Name = $1,
 						Last_Name = $2,
 						Age = $3
 						WHERE Athlete_ID = $4;`
-	_, err := DBConn.Exec(sqlStatement, a.First_Name, a.Last_Name, a.Age, a.Athlete_ID)
+	_, err := d.DBConn.Exec(sqlStatement, a.First_Name, a.Last_Name, a.Age, a.Athlete_ID)
 	return err
 }
 
-func DeleteAthlete(aid string) error{
+func (d *DB) DeleteAthlete(aid string) error{
 	sqlStatement := `DELETE FROM public.athlete WHERE Athlete_ID = $1`
-	_, err := DBConn.Exec(sqlStatement, aid)
+	_, err := d.DBConn.Exec(sqlStatement, aid)
 	return err
 }
