@@ -8,8 +8,7 @@ import (
 
 // Update a workout in the database
 func (l *Aer_Log) UpdateWorkout(rw http.ResponseWriter, r *http.Request) {
-
-	// swagger:route PUT /workouts/wid{id} workouts updateWorkout
+	// swagger:route PUT /workouts/athleteID{aid}/workoutID{ID} workouts updateWorkout
     //
     // Updates a workout in the system based on the given ID
     //
@@ -42,10 +41,25 @@ func (l *Aer_Log) UpdateWorkout(rw http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// Update an athlete in the database
 func (l *Aer_Log) UpdateAthlete(rw http.ResponseWriter, r *http.Request){
+	// swagger:route PUT /athletes/athleteID{aid} athletes updateAthlete
+    //
+    // Updates an athlete in the system based on the given ID
+    //
+	//      Produces:
+	//      - application/json
+	//
+	//		Consumes:
+	//		- application/json
+    //
+    //     	Schemes: http
+	//
+	// 		Responses:
+	//			201 : noContent
+	//			400 : verror
+	//			404 : badRequest
 
-
-	//swagger
 	athlete_id := getAthleteID(r)
 	athlete := r.Context().Value(KeyCtx{}).(models.Athlete)
 	athlete.Athlete_ID = athlete_id

@@ -3,61 +3,70 @@ consumes:
 - application/json
 definitions:
   Athlete:
-    description: Athlete Structure which defines the 'User' of a workout
     properties:
       age:
-        description: The age of the user
+        description: The age of the athlete
         format: uint8
-        maximum: 100
         minimum: 18
         type: integer
         x-go-name: Age
       athlete_id:
-        description: The ID linking to the user
-        format: int64
-        minimum: 1
+        description: The unique ID that distinguishes athletes
         readOnly: true
-        type: integer
-        x-go-name: ID
-      name:
-        description: The full name of the user
-        maxLength: 50
-        minLength: 5
         type: string
-        x-go-name: Name
-      sport:
-        description: The sport the user does
+        x-go-name: Athlete_ID
+      first_name:
+        description: The first name of the athlete
         type: string
-        x-go-name: Sport
+        x-go-name: First_Name
+      joined:
+        description: The date the athlete joined AER
+        readOnly: true
+        type: string
+        x-go-name: Joined
+      last_name:
+        description: The last name of the athlete
+        type: string
+        x-go-name: Last_Name
     required:
-    - name
-    - sport
+    - first_name
+    - last_name
+    - age
     type: object
     x-go-package: github.com/BrandonReno/A.E.R/docs
   Workout:
     properties:
       date:
-        description: The date this workout was completed
-        readOnly: true
+        description: The date the workout was completed
         type: string
         x-go-name: Date
       description:
-        description: The description of the workout
-        maxLength: 500
+        description: The description of the workout, how the athlete felt, what they
+          did, etc
         type: string
         x-go-name: Description
-      id:
-        description: The id for this workout
+      rating:
+        description: The athletes rating of the workout
         format: int64
-        minimum: 1
+        maximum: 10
+        minimum: 0
+        type: integer
+        x-go-name: Rating
+      sport:
+        description: The sport/excercise the athlete did
+        type: string
+        x-go-name: Sport
+      workout_id:
+        description: The unique integer ID of an athletes workout
+        format: int64
         readOnly: true
         type: integer
-        x-go-name: ID
-      user:
-        $ref: '#/definitions/Athlete'
+        x-go-name: Workout_ID
     required:
-    - user
+    - date
     - description
+    - sport
+    - rating
     type: object
     x-go-package: github.com/BrandonReno/A.E.R/docs
 info:
@@ -69,17 +78,103 @@ info:
 paths:
   /:
     get:
-      description: Lists workouts from all athletes in the system
-      operationId: listWorkouts
+      description: Lists all athletes registered in the system
+      operationId: listathletes
       produces:
       - application/json
       responses:
         "200":
-          $ref: '#/responses/workoutsResponse'
+          $ref: '#/responses/athletesResponse'
       schemes:
       - http
       tags:
-      - workouts
+      - athletes
+  /athletes:
+    post:
+      consumes:
+      - application/json
+      description: Adds a new workout to the database
+      operationId: addAthlete
+      parameters:
+      - in: body
+        name: Body
+        required: true
+        schema:
+          $ref: '#/definitions/Athlete'
+      responses:
+        "201":
+          $ref: '#/responses/noContent'
+        "400":
+          $ref: '#/responses/verror'
+      schemes:
+      - http
+      tags:
+      - athletes
+  /athletes/athlete{id}:
+    delete:
+      description: Deletes a specified athlete by id
+      operationId: deleteAthlete
+      parameters:
+      - example: H3bfj78eHe
+        in: path
+        name: athlete_id
+        required: true
+        type: string
+        x-go-name: ID
+      responses:
+        "201":
+          $ref: '#/responses/noContent'
+        "404":
+          $ref: '#/responses/badRequest'
+      schemes:
+      - http
+      tags:
+      - athletes
+  /athletes/athleteID{aid}:
+    get:
+      description: Lists information from a specified athlete
+      operationId: getAthlete
+      parameters:
+      - example: H3bfj78eHe
+        in: path
+        name: athlete_id
+        required: true
+        type: string
+        x-go-name: ID
+      produces:
+      - application/json
+      responses:
+        "200":
+          $ref: '#/responses/singleAthlete'
+      schemes:
+      - http
+      tags:
+      - athletes
+    put:
+      consumes:
+      - application/json
+      description: Updates an athlete in the system based on the given ID
+      operationId: updateAthlete
+      parameters:
+      - example: H3bfj78eHe
+        in: path
+        name: athlete_id
+        required: true
+        type: string
+        x-go-name: ID
+      produces:
+      - application/json
+      responses:
+        "201":
+          $ref: '#/responses/noContent'
+        "400":
+          $ref: '#/responses/verror'
+        "404":
+          $ref: '#/responses/badRequest'
+      schemes:
+      - http
+      tags:
+      - athletes
   /workouts:
     post:
       consumes:
@@ -90,9 +185,7 @@ paths:
       - in: body
         name: Body
         schema:
-          items:
-            $ref: '#/definitions/Workout'
-          type: array
+          $ref: '#/definitions/Workout'
       responses:
         "201":
           $ref: '#/responses/noContent'
@@ -102,45 +195,22 @@ paths:
       - http
       tags:
       - workouts
-  /workouts/wid{id}:
-    delete:
-      description: Deletes a specified workout by id
-      operationId: deleteWorkout
-      parameters:
-      - example: 374638
-        format: int64
-        in: path
-        name: id
-        required: true
-        type: integer
-        x-go-name: ID
-      responses:
-        "201":
-          $ref: '#/responses/noContent'
-        "404":
-          $ref: '#/responses/badRequest'
-      schemes:
-      - http
-      tags:
-      - workouts
+  /workouts/athleteID{aid}/workoutID{ID}:
     get:
-      description: Displays a single workout based upon the inputted ID
-      operationId: getWorkout
+      description: Gets a single workout from a specified athlete
+      operationId: getSingleWorkout
       parameters:
-      - example: 374638
-        format: int64
+      - example: H3bfj78eHe
         in: path
-        name: id
+        name: athlete_id
         required: true
-        type: integer
+        type: string
         x-go-name: ID
       produces:
       - application/json
       responses:
         "200":
           $ref: '#/responses/singleWorkout'
-        "400":
-          $ref: '#/responses/verror'
       schemes:
       - http
       tags:
@@ -154,16 +224,20 @@ paths:
       - example: 374638
         format: int64
         in: path
-        name: id
+        name: workout_id
         required: true
         type: integer
+        x-go-name: ID
+      - example: H3bfj78eHe
+        in: path
+        name: athlete_id
+        required: true
+        type: string
         x-go-name: ID
       - in: body
         name: Body
         schema:
-          items:
-            $ref: '#/definitions/Workout'
-          type: array
+          $ref: '#/definitions/Workout'
       produces:
       - application/json
       responses:
@@ -177,6 +251,27 @@ paths:
       - http
       tags:
       - workouts
+  /workouts/wid{id}:
+    delete:
+      description: Deletes a specified workout by id
+      operationId: deleteWorkout
+      parameters:
+      - example: 374638
+        format: int64
+        in: path
+        name: workout_id
+        required: true
+        type: integer
+        x-go-name: ID
+      responses:
+        "201":
+          $ref: '#/responses/noContent'
+        "404":
+          $ref: '#/responses/badRequest'
+      schemes:
+      - http
+      tags:
+      - workouts
 produces:
 - application/json
 responses:
@@ -184,10 +279,20 @@ responses:
     description: Index Not Found
     headers:
       error:
-        example: Could not delete/update workout
+        example: Could not find the workout or athlete ID in the database
         type: string
+  listAthletes:
+    description: All athletes are returned in the response
+    schema:
+      items:
+        $ref: '#/definitions/Athlete'
+      type: array
   noContent:
     description: No content is returned
+  singleAthlete:
+    description: A single athlete returns in the response
+    schema:
+      $ref: '#/definitions/Athlete'
   singleWorkout:
     description: A single workout returns in the response
     schema:
@@ -196,7 +301,7 @@ responses:
     description: Validation Error
     headers:
       error:
-        example: Unable to validate JSON object
+        example: Unable to validate athlete or workout object
         type: string
   workoutsResponse:
     description: A list of workouts returns in the response

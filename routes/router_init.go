@@ -27,7 +27,7 @@ func NewRouter(l *controllers.Aer_Log) *mux.Router{
 
 	docs := serve_mux.Methods(http.MethodGet).Subrouter()
 	docs.Handle("/docs", sh) //Set up the GetSrouter to also handle the docs
-	docs.Handle("/swagger.yaml", http.FileServer(http.Dir("./"))) //Serve the swagger.yaml file on the server
+	docs.Handle("/swagger.yaml", http.FileServer(http.Dir("./docs"))) //Serve the swagger.yaml file on the server
 
 	return serve_mux
 }

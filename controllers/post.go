@@ -24,6 +24,7 @@ func (l *Aer_Log) AddWorkout(rw http.ResponseWriter, r *http.Request){
 	workout := r.Context().Value(KeyCtx{}).(models.Workout)
 	err := l.db.CreateWorkout(&workout)
 	if err != nil{
+		l.l.Printf("Error: Could not create workout: %s", err)
 		http.Error(rw, fmt.Sprintf("Error in creating workout: %s", err), http.StatusInternalServerError)
 		return
 	}
@@ -31,14 +32,26 @@ func (l *Aer_Log) AddWorkout(rw http.ResponseWriter, r *http.Request){
 
 }
 
+// Creates a new athlete
 func (l *Aer_Log) CreateAthlete(rw http.ResponseWriter, r *http.Request){
-
-	//swagger
+	// swagger:route POST /athletes athletes addAthlete
+    //
+    // Adds a new workout to the database
+    //
+    //     	Consumes:
+    //     	- application/json
+	//
+    //     	Schemes: http
+	//
+	// 		Responses:
+	//			201 : noContent
+	//			400 : verror
 
 	athlete := r.Context().Value(KeyCtx{}).(models.Athlete)
 	err := l.db.AddAthlete(&athlete)
 
 	if err != nil{
+		l.l.Printf("Error: Could not create athlete")
 		http.Error(rw, fmt.Sprintf("Error in creating athlete: %s", err), http.StatusBadRequest)
 		return
 	}

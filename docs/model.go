@@ -1,47 +1,45 @@
 package docs
 
 // swagger:model
-type Workout struct { 
-	// The id for this workout
-    //
-    // min: 1
-	// read only: true
-	ID          int     `json:"id"`
-	// The user whom completed this workout
-    //
-    // required: true
-	User        Athlete `json:"user" validate:"required"`
-	// The date this workout was completed
-	//
-	// read only: true
-	Date        string  `json:"date"`
-	// The description of the workout
-    //
-    // maximum length: 500
+type Workout struct {
+	// The unique integer ID of an athletes workout
+	// Read Only: true
+	Workout_ID  int    `json:"workout_id"`
+	// The unique ID that links an athlete to a workout
+	// Read Only: true
+	Athlete_ID  string `json:"-" validate:"required"`
+	// The date the workout was completed
 	// required: true
-	Description string  `json:"description" validate:"required"`
+	Date        string `json:"date"`
+	// The description of the workout, how the athlete felt, what they did, etc
+	// required: true
+	Description string `json:"description" validate:"required"`
+	// The sport/excercise the athlete did
+	// required: true
+	Sport       string `json:"sport"`
+	// The athletes rating of the workout
+	// min: 0
+	// max: 10
+	// required: true
+	Rating      int    `json:"rating"`
 }
 
-//Athlete Structure which defines the 'User' of a workout
+// swagger:model
 type Athlete struct {
-	// The ID linking to the user
-    //
-    // min: 1
+	// The unique ID that distinguishes athletes
 	// Read Only: true
-	ID    int    `json:"athlete_id"`
-	// The full name of the user
-    //
-    // minimum length: 5
-	// maximum length: 50
+	Athlete_ID string    `json:"athlete_id"`
+	// The first name of the athlete
 	// required: true
-	Name  string `json:"name" validate:"required"`
-	// The sport the user does
-    //
+	First_Name string    `json:"first_name" validate:"required"`
+	// The last name of the athlete
 	// required: true
-	Sport string `json:"sport" validate:"required,Sport"`
-	// The age of the user
-    //
-    // min: 18
-	// max: 100
-	Age   uint8    `json:"age" validate:"gte=18, lte=100`
+	Last_Name  string    `json:"last_name" validate:"required"`
+	// The age of the athlete
+	// min: 18
+	// required: true
+	Age        uint8     `json:"age"`
+	// The date the athlete joined AER
+	// Read Only: true
+	Joined     string `json:"joined"`
 }

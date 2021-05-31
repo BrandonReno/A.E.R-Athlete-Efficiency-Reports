@@ -2,7 +2,6 @@ package models
 
 import (
 	"strings"
-
 	"github.com/go-playground/validator")
 
 
@@ -11,8 +10,8 @@ type Workout struct {
 	Athlete_ID  string `json:"-" validate:"required"`
 	Date        string `json:"date"`
 	Description string `json:"description" validate:"required"`
-	Sport       string `json:"sport" validate Sport`
-	Rating      int    `json:"rating" validate: gte=0, lte=10`
+	Sport       string `json:"sport" validate:"Sport"`
+	Rating      int    `json:"rating" validate:"gte=0, lte=10"`
 }
 
 var AvailableSports = []string{"swimming", "running", "lifting", "biking"}

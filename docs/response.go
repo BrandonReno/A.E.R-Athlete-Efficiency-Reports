@@ -16,23 +16,37 @@ type singleWorkoutResponseWrapper struct{
 	Body models.Workout
 }
 
+// A single athlete returns in the response
+// swagger:response singleAthlete
+type singleAthleteResponseWrapper struct{
+	// in:body
+	Body models.Athlete
+}
+
+// All athletes are returned in the response
+// swagger:response listAthletes
+type athletesResponseWrapper struct{
+	// in:body
+	Body []models.Athlete
+}
+
 
 // No content is returned
 // swagger:response noContent
-type WorkoutNoContentWrapper struct{
+type NoContentWrapper struct{
 }
 
 // Index Not Found
 // swagger:response badRequest
 type badRequestWrapper struct{
-	// 	example: Could not delete/update workout
-		err string `json:"error"`
-	}
+// 	example: Could not find the workout or athlete ID in the database
+	Err string `json:"error"`
+}
 	
 // Validation Error
 // swagger:response verror
 type validationErrorWrapper struct{
-//	example: Unable to validate JSON object
-	err string `json:"error"`
+//	example: Unable to validate athlete or workout object
+	Err string `json:"error"`
 }
 
