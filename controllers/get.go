@@ -23,23 +23,37 @@ func (l *Aer_Log) GetWorkouts(rw http.ResponseWriter, r *http.Request) {
 
 	wl, err := l.db.GetUserWorkouts(id)
 	if err != nil {
-		http.Error(rw, fmt.Sprintf("error returned: %s", err), http.StatusInternalServerError)
+		l.l.Printf("Error: Could not obtain user workouts: %s", err)
+		http.Error(rw, fmt.Sprintf("Error getting user workouts: %s", err), http.StatusBadRequest)
+		return
 	}
 	err = ToJSON(wl, rw) //Encode the list from structs to JSON objects
 	if err != nil {      //if json can not be encoded return an error and log the error while also returning out of the function
+		l.l.Printf("Error: Could not encode to JSON: %s", err)
 		http.Error(rw, "Unable to encode JSON object", http.StatusInternalServerError)
 		return
 	}
 }
 
+// Get a single workout in the system
 func (l *Aer_Log) GetSingleWorkout(rw http.ResponseWriter, r *http.Request) {
-
-	//swagger stuff here
+	// swagger:route GET / workouts getSingleWorkout
+	//
+	// Gets a single workout from a specified athlete
+	//
+	//     Produces:
+	//     - application/json
+	//
+	//     Schemes: http
+	//
+	//     Responses:
+	//			200: workoutsResponse
 
 	Athlete_ID := getAthleteID(r)
 	Workout_ID, err := getWorkoutID(r)
 
 	if err != nil {
+		l.l.Printf("Error: Could not convert string to int: %s", err)
 		http.Error(rw, fmt.Sprintf("Error in converting string to int: %s", err), http.StatusInternalServerError)
 		return
 	}
@@ -47,6 +61,7 @@ func (l *Aer_Log) GetSingleWorkout(rw http.ResponseWriter, r *http.Request) {
 	w, err := l.db.GetSingleWorkout(Athlete_ID, Workout_ID)
 
 	if err != nil {
+		l.l.Printf("Error: Could not get workoutID, athleteID match: %s", err)
 		http.Error(rw, fmt.Sprintf("Error in getting workout: %s", err), http.StatusBadRequest)
 		return
 	}
@@ -54,33 +69,66 @@ func (l *Aer_Log) GetSingleWorkout(rw http.ResponseWriter, r *http.Request) {
 	err = ToJSON(w, rw)
 
 	if err != nil {
-		http.Error(rw, fmt.Sprintf("Error in serializing workout: %s", err), http.StatusBadRequest)
+		l.l.Printf("Error: Could not encode to JSON: %s", err)
+		http.Error(rw, fmt.Sprintf("Error in encoding workout to JSON: %s", err), http.StatusBadRequest)
+		return
 	}
 }
 
+// Get a single athlete in the system
 func (l *Aer_Log) GetAthlete(rw http.ResponseWriter, r *http.Request) {
-
-	//swagger here
+	// swagger:route GET / athletes getAthlete
+	//
+	// Lists information from a specified athlete
+	//
+	//     Produces:
+	//     - application/json
+	//
+	//     Schemes: http
+	//
+	//     Responses:
+	//			200: workoutsResponse
 
 	athlete_id := getAthleteID(r)
 	athlete, err := l.db.GetAthlete(athlete_id)
 	if err != nil {
+		l.l.Printf("Error: could not get athlete from athlete_id %s : %s", athlete_id, err)
 		http.Error(rw, fmt.Sprintf("Error in getting athlete: %s", err), http.StatusBadRequest)
 		return
 	}
-	ToJSON(athlete, rw)
+	err = ToJSON(athlete, rw)
+	if err != nil {
+		l.l.Printf("Error: Could not encode to JSON: %s", err)
+		http.Error(rw, fmt.Sprintf("Error in encoding workout to JSON: %s", err), http.StatusBadRequest)
+		return
+	}
 }
 
+// Gets all athletes registered in the system
 func (l *Aer_Log) GetAllAthletes(rw http.ResponseWriter, r *http.Request) {
-
-	//swagger here
+	// swagger:route GET / athletes listathletes
+	//
+	// Lists all athletes registered in the system
+	//
+	//     Produces:
+	//     - application/json
+	//
+	//     Schemes: http
+	//
+	//     Responses:
+	//			200: workoutsResponse
 
 	athletes, err := l.db.GetAllAthletes()
 	if err != nil {
+		l.l.Printf("Error: Could not retrieve list of athletes: %s", err)
 		http.Error(rw, fmt.Sprintf("Error getting all athletes: %s", err), http.StatusBadRequest)
 		return
 	}
-	fmt.Println("am i showing up")
-	ToJSON(athletes, rw)
-
+	
+	err = ToJSON(athletes, rw)
+	if err != nil {
+		l.l.Printf("Error: Could not encode to JSON: %s", err)
+		http.Error(rw, fmt.Sprintf("Error in encoding workout to JSON: %s", err), http.StatusBadRequest)
+		return
+	}
 }
