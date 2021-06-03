@@ -1,4 +1,4 @@
-POST http://localhost:9090/workouts/uf23b
+POST http://localhost:9090/workouts/5phOA2wkBb
 
 {
     "date": "5/13/2021",
@@ -29,12 +29,12 @@ GET http://localhost:9090/athletes
 POST http://localhost:9090/athletes
 
 {
-    "first_name": "Erik",
-    "last_name": "Clemensen",
-    "age": 22
+    "first_name": "Kelsey",
+    "last_name": "Lloyd",
+    "age": 20
 }
 
-PUT http://localhost:9090/athlete/R5HYMiks5d
+PUT http://localhost:9090/athletes/JfVGnwnR2O
 
 {
     "first_name": "Kelsey",

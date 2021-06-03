@@ -40,8 +40,8 @@ func main() {
 	s := http.Server{
 		Addr:         Port,              //Port 9090
 		Handler:      muxRouter,         //Handler is our created mux server_mux
-		ReadTimeout:  1 * time.Second,   //Read timeout is 1 second
-		WriteTimeout: 1 * time.Second,   //Write timeout is 1 second
+		ReadTimeout:  10 * time.Second,   //Read timeout is 1 second
+		WriteTimeout: 10 * time.Second,   //Write timeout is 1 second
 		IdleTimeout:  120 * time.Second, //Idle timeout is 120 seconds
 	}
 

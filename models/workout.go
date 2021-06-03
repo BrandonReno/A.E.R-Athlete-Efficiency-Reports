@@ -11,7 +11,7 @@ type Workout struct {
 	Date        string `json:"date"`
 	Description string `json:"description" validate:"required"`
 	Sport       string `json:"sport" validate:"Sport"`
-	Rating      int    `json:"rating" validate:"gte=0, lte=10"`
+	Rating      int    `json:"rating" validate:"gte=0,lte=10"`
 }
 
 var AvailableSports = []string{"swimming", "running", "lifting", "biking"}

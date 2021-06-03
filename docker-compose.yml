@@ -29,6 +29,16 @@ services:
     depends_on: 
       - db
 
+  pgadmin:
+    container_name: pgadmin
+    image: dpage/pgadmin4
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: postgres
+      PGADMIN_DEFAULT_PASSWORD: renol114
+    ports:
+      - "5050:80"
+
 volumes:
   backend_aer:
   database_postgres:                  
