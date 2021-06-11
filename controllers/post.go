@@ -28,8 +28,22 @@ func (l *Aer_Log) AddWorkout(rw http.ResponseWriter, r *http.Request){
 		http.Error(rw, fmt.Sprintf("Error in creating workout: %s", err), http.StatusInternalServerError)
 		return
 	}
-	
 
+	athlete, err := l.db.GetAthlete(workout.Athlete_ID)
+
+	if err != nil{
+		l.l.Printf("Error: Could not find athlete: %s", err)
+		http.Error(rw, fmt.Sprintf("Error could not find athlete: %s", err), http.StatusInternalServerError)
+		return
+	}
+
+	err = l.db.UpdateEfficiency(&athlete)
+	if err != nil{
+		l.l.Printf("Error: Could not update efficiency score: %s", err)
+		http.Error(rw, fmt.Sprintf("Error could not update efficiency score: %s", err), http.StatusInternalServerError)
+		return
+
+	}
 }
 
 // Creates a new athlete
