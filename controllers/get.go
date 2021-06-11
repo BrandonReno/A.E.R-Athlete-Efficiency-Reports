@@ -132,3 +132,31 @@ func (l *Aer_Log) GetAllAthletes(rw http.ResponseWriter, r *http.Request) {
 		return
 	}
 }
+
+func (l *Aer_Log) GetAthleteEfficiency(rw http.ResponseWriter, r *http.Request){
+
+	athleteID := getAthleteID(r)
+
+	athlete, err := l.db.GetAthlete(athleteID)
+
+	if err != nil{
+		l.l.Printf("Error: could not get athlete: %s", err)
+		http.Error(rw, fmt.Sprintf("Error in getting athlete from database, athlete id might not exist: %s", err), http.StatusBadRequest)
+		return
+	}
+	e, err := l.db.GetEfficiency(&athlete)
+
+	if err != nil{
+		l.l.Printf("Error: could not get athletes efficiency: %s", err)
+		http.Error(rw, fmt.Sprintf("Error in getting athletes efficiency from database: %s", err), http.StatusBadRequest)
+		return
+	}
+
+	err = ToJSON(e, rw)
+
+	if err != nil{
+		l.l.Printf("Error: could not transfer efficiency to json: %s", err)
+		http.Error(rw, fmt.Sprintf("Error inserializing efficiency: %s", err), http.StatusBadRequest)
+		return
+	}
+}
