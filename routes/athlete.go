@@ -54,6 +54,12 @@ func initAthleteSlice(l *controllers.Aer_Log) Routes{
 			Pattern: "/athletes",
 			Handler: l.GetAllAthletes,
 		},
+
+		Route{
+			Request: http.MethodGet,
+			Pattern: "/athletes/{athlete_id:[[:alnum:]]+}/aer",
+			Handler: l.GetAthleteEfficiency,
+		},
 	}
 	return athleteRoutes
 }

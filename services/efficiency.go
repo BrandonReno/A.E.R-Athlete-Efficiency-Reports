@@ -11,7 +11,7 @@ func(db *DB) GetEfficiency(a *models.Athlete) (models.Efficiency, error){
 
 	e := models.Efficiency{}
 
-	err := row.Scan(&e.Athlete_ID, &e.Efficiency_ID, &e.Efficiency_Score, &e.Favorite_Sport)
+	err := row.Scan(&e.Efficiency_ID, &e.Efficiency_Score, &e.Favorite_Sport, &e.Athlete_ID)
 
 	if err != nil{
 		return models.Efficiency{}, err

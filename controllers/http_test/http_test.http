@@ -1,10 +1,10 @@
-POST http://localhost:9090/workouts/5phOA2wkBb
+POST http://localhost:9090/athletes/5phOA2wkBb/workouts
 
 {
     "date": "5/13/2021",
     "description": "Hard Workout",
-    "sport": "swimming",
-    "rating": 3
+    "sport": "running",
+    "rating": 2
 }
 
 GET http://localhost:9090/workouts/uf23b
@@ -22,7 +22,7 @@ PUT http://localhost:9090/workouts/uf23b/4
     "rating": 3
 }
 
-GET http://localhost:9090/athletes/5phOA2wkBb
+GET http://localhost:9090/athletes/5phOA2wkBb/aer
 
 GET http://localhost:9090/athletes
 

@@ -34,7 +34,7 @@ services:
     image: dpage/pgadmin4
     restart: always
     environment:
-      PGADMIN_DEFAULT_EMAIL: postgres
+      PGADMIN_DEFAULT_EMAIL: b_reno@u.pacific.edu
       PGADMIN_DEFAULT_PASSWORD: renol114
     ports:
       - "5050:80"

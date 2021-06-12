@@ -20,31 +20,31 @@ func initWorkoutSlice(l *controllers.Aer_Log) Routes{
 	workoutRoutes := Routes{
 		Route{
 			Request: http.MethodGet,
-			Pattern: "/workouts/{athlete_id:[[:alnum:]]+}",
+			Pattern: "/athletes/{athlete_id:[[:alnum:]]+}/workouts",
 			Handler: l.GetWorkouts,
 		},
 
 		Route{
 			Request: http.MethodGet,
-			Pattern: "/workouts/{athlete_id:[[:alnum:]]+}/{workout_id:[0-9]+}",
+			Pattern: "/athletes/{athlete_id:[[:alnum:]]+}/workouts/{workout_id:[0-9]+}",
 			Handler: l.GetSingleWorkout,
 		},
 
 		Route{
 			Request: http.MethodPost,
-			Pattern: "/workouts/{athlete_id:[[:alnum:]]+}",
+			Pattern: "/athletes/{athlete_id:[[:alnum:]]+}/workouts",
 			Handler: l.AddWorkout,
 		},
 
 		Route{
 			Request: http.MethodPut,
-			Pattern: "/workouts/{athlete_id:[[:alnum:]]+}/{workout_id:[0-9]+}",
+			Pattern: "/athletes/{athlete_id:[[:alnum:]]+}/workouts/{workout_id:[0-9]+}",
 			Handler: l.UpdateWorkout,
 		},
 
 		Route{
 			Request: http.MethodDelete,
-			Pattern: "/workouts/{athlete_id:[[:alnum:]]+}/{workout_id:[0-9]+}",
+			Pattern: "/athletes/{athlete_id:[[:alnum:]]+}/workouts/{workout_id:[0-9]+}",
 			Handler: l.DeleteWorkout,
 		},
 	}
