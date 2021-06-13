@@ -6,7 +6,21 @@ import (
 )
 
 func (l *Aer_Log) GetAllWorkouts(rw http.ResponseWriter, r *http.Request){
-	wl, err := l.db.GetAllWorkouts
+	wl, err := l.db.GetAllWorkouts()
+
+	if err != nil{
+		l.l.Printf("Error: Could not obtain all workouts: %s", err)
+		http.Error(rw, fmt.Sprintf("Error could not get workouts: %s", err), http.StatusBadRequest)
+		return
+	}
+
+	err = ToJSON(wl, rw)
+
+	if err != nil{
+		l.l.Printf("Error: Could not serialize workouts: %s", err)
+		http.Error(rw, fmt.Sprintf("Error serializing workouts: %s", err), http.StatusBadRequest)
+		return
+	}
 }
 
 
