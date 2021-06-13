@@ -8,7 +8,7 @@ import (
 
 // Update a workout in the database
 func (l *Aer_Log) UpdateWorkout(rw http.ResponseWriter, r *http.Request) {
-	// swagger:route PUT /workouts/athleteID{aid}/workoutID{ID} workouts updateWorkout
+	// swagger:route PUT /athletes/{athlete_id}/workouts/{workout_id} workouts updateWorkout
     //
     // Updates a workout in the system based on the given ID
     //
@@ -43,7 +43,7 @@ func (l *Aer_Log) UpdateWorkout(rw http.ResponseWriter, r *http.Request) {
 
 // Update an athlete in the database
 func (l *Aer_Log) UpdateAthlete(rw http.ResponseWriter, r *http.Request){
-	// swagger:route PUT /athletes/athleteID{aid} athletes updateAthlete
+	// swagger:route PUT /athletes/{athlete_id} athletes updateAthlete
     //
     // Updates an athlete in the system based on the given ID
     //

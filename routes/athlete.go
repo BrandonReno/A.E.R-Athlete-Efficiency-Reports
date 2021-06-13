@@ -19,12 +19,7 @@ func initAthleteSR(r *mux.Router, l *controllers.Aer_Log){
 
 func initAthleteSlice(l *controllers.Aer_Log) Routes{
 	athleteRoutes := Routes{
-		Route{
-			Request: http.MethodGet,
-			Pattern: "/",
-			Handler: l.WelcomeRoute,
-		},
-
+		
 		Route{
 			Request: http.MethodGet,
 			Pattern: "/athletes/{athlete_id:[[:alnum:]]+}",

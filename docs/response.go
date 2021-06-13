@@ -6,7 +6,7 @@ import "github.com/BrandonReno/A.E.R/models"
 // swagger:response workoutsResponse
 type workoutsResponseWrapper struct{
 	//	in:body
-		body []models.Workout
+	Body []models.Workout
 }
 
 //A single workout returns in the response
@@ -24,10 +24,17 @@ type singleAthleteResponseWrapper struct{
 }
 
 // All athletes are returned in the response
-// swagger:response listAthletes
+// swagger:response athletesResponse
 type athletesResponseWrapper struct{
 	// in:body
 	Body []models.Athlete
+}
+
+// An athletes aer is returned in the response
+// swagger:response efficiencyResponse
+type ResponseEfficiencyWrapper struct{
+	//	in:body
+	Body models.Efficiency	
 }
 
 

@@ -43,3 +43,21 @@ type Athlete struct {
 	// Read Only: true
 	Joined     string `json:"joined"`
 }
+
+// swagger:model
+type Efficiency struct{
+	// The unique ID that distinguishes efficiency objects from each other
+	// Read Only: true
+	Efficiency_ID    int     `json:"-"`
+	// The efficiency score of an athlete based upon their past workouts
+	// Example: 20.34
+	// Read Only: true
+	Efficiency_Score float64 `json:"efficiency_score"`
+	// The favorite sport of the athlete based upon what they do in workouts most often
+	// Example: swimming
+	// Read Only: true
+	Favorite_Sport   string  `json:"favorite_excercise"`
+	// The link between the athlete and efficiency score
+	// Read Only: true
+	Athlete_ID       string  `json:"-"`
+}

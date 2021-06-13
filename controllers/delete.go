@@ -7,7 +7,7 @@ import (
 
 // Delete a workout from the database
 func (l * Aer_Log) DeleteWorkout(rw http.ResponseWriter, r *http.Request){
-	// swagger:route DELETE /workouts/wid{id} workouts deleteWorkout
+	// swagger:route DELETE /athletes/{athlete_id}/{workout_id} workouts deleteWorkout
     //
     // Deletes a specified workout by id
     //
@@ -34,7 +34,7 @@ func (l * Aer_Log) DeleteWorkout(rw http.ResponseWriter, r *http.Request){
 
 //Delete an athlete from the system
 func (l * Aer_Log) DeleteAthlete(rw http.ResponseWriter, r *http.Request){
-	// swagger:route DELETE /athletes/athlete{id} athletes deleteAthlete
+	// swagger:route DELETE /athletes/{athlete_id} athletes deleteAthlete
     //
     // Deletes a specified athlete by id
     //

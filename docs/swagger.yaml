@@ -34,6 +34,24 @@ definitions:
     - age
     type: object
     x-go-package: github.com/BrandonReno/A.E.R/docs
+  Efficiency:
+    properties:
+      efficiency_score:
+        description: The efficiency score of an athlete based upon their past workouts
+        example: 20.34
+        format: double
+        readOnly: true
+        type: number
+        x-go-name: Efficiency_Score
+      favorite_excercise:
+        description: The favorite sport of the athlete based upon what they do in
+          workouts most often
+        example: swimming
+        readOnly: true
+        type: string
+        x-go-name: Favorite_Sport
+    type: object
+    x-go-package: github.com/BrandonReno/A.E.R/docs
   Workout:
     properties:
       date:
@@ -78,6 +96,19 @@ info:
 paths:
   /:
     get:
+      description: Lists workouts from all athletes accross the service
+      operationId: getAllWorkouts
+      produces:
+      - application/json
+      responses:
+        "200":
+          $ref: '#/responses/workoutsResponse'
+      schemes:
+      - http
+      tags:
+      - workouts
+  /athletes:
+    get:
       description: Lists all athletes registered in the system
       operationId: listAthletes
       produces:
@@ -89,33 +120,6 @@ paths:
       - http
       tags:
       - athletes
-  /athleteID{aid}:
-    post:
-      consumes:
-      - application/json
-      description: Adds a new workout to the database
-      operationId: addWorkout
-      parameters:
-      - example: H3bfj78eHe
-        in: path
-        name: athlete_id
-        required: true
-        type: string
-        x-go-name: ID
-      - in: body
-        name: Body
-        schema:
-          $ref: '#/definitions/Workout'
-      responses:
-        "201":
-          $ref: '#/responses/noContent'
-        "400":
-          $ref: '#/responses/verror'
-      schemes:
-      - http
-      tags:
-      - workouts
-  /athletes:
     post:
       consumes:
       - application/json
@@ -136,7 +140,7 @@ paths:
       - http
       tags:
       - athletes
-  /athletes/athlete{id}:
+  /athletes/{athlete_id}:
     delete:
       description: Deletes a specified athlete by id
       operationId: deleteAthlete
@@ -146,7 +150,7 @@ paths:
         name: athlete_id
         required: true
         type: string
-        x-go-name: ID
+        x-go-name: Athlete_id
       responses:
         "201":
           $ref: '#/responses/noContent'
@@ -156,7 +160,6 @@ paths:
       - http
       tags:
       - athletes
-  /athletes/athleteID{aid}:
     get:
       description: Lists information from a specified athlete
       operationId: getAthlete
@@ -166,16 +169,43 @@ paths:
         name: athlete_id
         required: true
         type: string
-        x-go-name: ID
+        x-go-name: Athlete_id
       produces:
       - application/json
       responses:
         "200":
           $ref: '#/responses/singleAthlete'
+        "404":
+          $ref: '#/responses/badRequest'
       schemes:
       - http
       tags:
       - athletes
+    post:
+      consumes:
+      - application/json
+      description: Adds a new workout to the database
+      operationId: addWorkout
+      parameters:
+      - example: H3bfj78eHe
+        in: path
+        name: athlete_id
+        required: true
+        type: string
+        x-go-name: Athlete_id
+      - in: body
+        name: Body
+        schema:
+          $ref: '#/definitions/Workout'
+      responses:
+        "201":
+          $ref: '#/responses/noContent'
+        "400":
+          $ref: '#/responses/verror'
+      schemes:
+      - http
+      tags:
+      - workouts
     put:
       consumes:
       - application/json
@@ -187,7 +217,7 @@ paths:
         name: athlete_id
         required: true
         type: string
-        x-go-name: ID
+        x-go-name: Athlete_id
       - in: body
         name: Body
         required: true
@@ -206,7 +236,71 @@ paths:
       - http
       tags:
       - athletes
-  /workouts/athleteID{aid}/workoutID{ID}:
+  /athletes/{athlete_id}/{workout_id}:
+    delete:
+      description: Deletes a specified workout by id
+      operationId: deleteWorkout
+      parameters:
+      - example: 374638
+        format: int64
+        in: path
+        name: workout_id
+        required: true
+        type: integer
+        x-go-name: Workout_id
+      - example: H3bfj78eHe
+        in: path
+        name: athlete_id
+        required: true
+        type: string
+        x-go-name: Athlete_id
+      responses:
+        "201":
+          $ref: '#/responses/noContent'
+        "404":
+          $ref: '#/responses/badRequest'
+      schemes:
+      - http
+      tags:
+      - workouts
+  /athletes/{athlete_id}/aer:
+    get:
+      description: Shows the athletes current AER statistics
+      operationId: getEfficiency
+      parameters:
+      - example: H3bfj78eHe
+        in: path
+        name: athlete_id
+        required: true
+        type: string
+        x-go-name: Athlete_id
+      produces:
+      - application/json
+      responses:
+        "200":
+          $ref: '#/responses/efficiencyResponse'
+        "404":
+          $ref: '#/responses/badRequest'
+      schemes:
+      - http
+      tags:
+      - efficiency
+  /athletes/{athlete_id}/workouts:
+    get:
+      description: Lists workouts from a particular registered athlete
+      operationId: getUserWorkouts
+      produces:
+      - application/json
+      responses:
+        "200":
+          $ref: '#/responses/workoutsResponse'
+        "404":
+          $ref: '#/responses/badRequest'
+      schemes:
+      - http
+      tags:
+      - workouts
+  /athletes/{athlete_id}/workouts/{workout_id}:
     get:
       description: Gets a single workout from a specified athlete
       operationId: getSingleWorkout
@@ -217,18 +311,20 @@ paths:
         name: workout_id
         required: true
         type: integer
-        x-go-name: ID
+        x-go-name: Workout_id
       - example: H3bfj78eHe
         in: path
         name: athlete_id
         required: true
         type: string
-        x-go-name: ID
+        x-go-name: Athlete_id
       produces:
       - application/json
       responses:
         "200":
           $ref: '#/responses/singleWorkout'
+        "404":
+          $ref: '#/responses/badRequest'
       schemes:
       - http
       tags:
@@ -245,13 +341,13 @@ paths:
         name: workout_id
         required: true
         type: integer
-        x-go-name: ID
+        x-go-name: Workout_id
       - example: H3bfj78eHe
         in: path
         name: athlete_id
         required: true
         type: string
-        x-go-name: ID
+        x-go-name: Athlete_id
       - in: body
         name: Body
         schema:
@@ -269,48 +365,25 @@ paths:
       - http
       tags:
       - workouts
-  /workouts/wid{id}:
-    delete:
-      description: Deletes a specified workout by id
-      operationId: deleteWorkout
-      parameters:
-      - example: 374638
-        format: int64
-        in: path
-        name: workout_id
-        required: true
-        type: integer
-        x-go-name: ID
-      - example: H3bfj78eHe
-        in: path
-        name: athlete_id
-        required: true
-        type: string
-        x-go-name: ID
-      responses:
-        "201":
-          $ref: '#/responses/noContent'
-        "404":
-          $ref: '#/responses/badRequest'
-      schemes:
-      - http
-      tags:
-      - workouts
 produces:
 - application/json
 responses:
+  athletesResponse:
+    description: All athletes are returned in the response
+    schema:
+      items:
+        $ref: '#/definitions/Athlete'
+      type: array
   badRequest:
     description: Index Not Found
     headers:
       error:
         example: Could not find the workout or athlete ID in the database
         type: string
-  listAthletes:
-    description: All athletes are returned in the response
+  efficiencyResponse:
+    description: An athletes aer is returned in the response
     schema:
-      items:
-        $ref: '#/definitions/Athlete'
-      type: array
+      $ref: '#/definitions/Efficiency'
   noContent:
     description: No content is returned
   singleAthlete:

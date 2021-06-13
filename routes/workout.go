@@ -20,6 +20,12 @@ func initWorkoutSlice(l *controllers.Aer_Log) Routes{
 	workoutRoutes := Routes{
 		Route{
 			Request: http.MethodGet,
+			Pattern: "/",
+			Handler: l.GetAllWorkouts,
+		},
+		
+		Route{
+			Request: http.MethodGet,
 			Pattern: "/athletes/{athlete_id:[[:alnum:]]+}/workouts",
 			Handler: l.GetWorkouts,
 		},

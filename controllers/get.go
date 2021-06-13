@@ -5,7 +5,20 @@ import (
 	"net/http"
 )
 
+//lists all workouts from all athletes
 func (l *Aer_Log) GetAllWorkouts(rw http.ResponseWriter, r *http.Request){
+	// swagger:route GET / workouts getAllWorkouts
+	//
+	// Lists workouts from all athletes accross the service
+	//
+	//     Produces:
+	//     - application/json
+	//
+	//     Schemes: http
+	//
+	//     Responses:
+	//			200: workoutsResponse
+
 	wl, err := l.db.GetAllWorkouts()
 
 	if err != nil{
@@ -24,12 +37,12 @@ func (l *Aer_Log) GetAllWorkouts(rw http.ResponseWriter, r *http.Request){
 }
 
 
-// Gets all workouts in the system
+// Gets all workouts in the system for an athlete
 func (l *Aer_Log) GetWorkouts(rw http.ResponseWriter, r *http.Request) {
 
-	// swagger:route GET / workouts listWorkouts
+	// swagger:route GET /athletes/{athlete_id}/workouts workouts getUserWorkouts
 	//
-	// Lists workouts from all athletes in the system
+	// Lists workouts from a particular registered athlete
 	//
 	//     Produces:
 	//     - application/json
@@ -38,6 +51,8 @@ func (l *Aer_Log) GetWorkouts(rw http.ResponseWriter, r *http.Request) {
 	//
 	//     Responses:
 	//			200: workoutsResponse
+	//			404: badRequest
+
 	id := getAthleteID(r)
 
 	wl, err := l.db.GetUserWorkouts(id)
@@ -56,7 +71,7 @@ func (l *Aer_Log) GetWorkouts(rw http.ResponseWriter, r *http.Request) {
 
 // Get a single workout in the system
 func (l *Aer_Log) GetSingleWorkout(rw http.ResponseWriter, r *http.Request) {
-	// swagger:route GET /workouts/athleteID{aid}/workoutID{ID} workouts getSingleWorkout
+	// swagger:route GET /athletes/{athlete_id}/workouts/{workout_id} workouts getSingleWorkout
 	//
 	// Gets a single workout from a specified athlete
 	//
@@ -67,6 +82,7 @@ func (l *Aer_Log) GetSingleWorkout(rw http.ResponseWriter, r *http.Request) {
 	//
 	//     Responses:
 	//			200: singleWorkout
+	//			404: badRequest
 
 	Athlete_ID := getAthleteID(r)
 	Workout_ID, err := getWorkoutID(r)
@@ -96,7 +112,7 @@ func (l *Aer_Log) GetSingleWorkout(rw http.ResponseWriter, r *http.Request) {
 
 // Get a single athlete in the system
 func (l *Aer_Log) GetAthlete(rw http.ResponseWriter, r *http.Request) {
-	// swagger:route GET /athletes/athleteID{aid} athletes getAthlete
+	// swagger:route GET /athletes/{athlete_id} athletes getAthlete
 	//
 	// Lists information from a specified athlete
 	//
@@ -107,6 +123,7 @@ func (l *Aer_Log) GetAthlete(rw http.ResponseWriter, r *http.Request) {
 	//
 	//     Responses:
 	//			200: singleAthlete
+	//			404: badRequest
 
 	athlete_id := getAthleteID(r)
 	athlete, err := l.db.GetAthlete(athlete_id)
@@ -125,7 +142,7 @@ func (l *Aer_Log) GetAthlete(rw http.ResponseWriter, r *http.Request) {
 
 // Gets all athletes registered in the system
 func (l *Aer_Log) GetAllAthletes(rw http.ResponseWriter, r *http.Request) {
-	// swagger:route GET / athletes listAthletes
+	// swagger:route GET /athletes athletes listAthletes
 	//
 	// Lists all athletes registered in the system
 	//
@@ -152,8 +169,20 @@ func (l *Aer_Log) GetAllAthletes(rw http.ResponseWriter, r *http.Request) {
 	}
 }
 
+//Returns an athletes AER 
 func (l *Aer_Log) GetAthleteEfficiency(rw http.ResponseWriter, r *http.Request){
-
+	// swagger:route GET /athletes/{athlete_id}/aer efficiency getEfficiency
+	//
+	// Shows the athletes current AER statistics
+	//
+	//     Produces:
+	//     - application/json
+	//
+	//     Schemes: http
+	//
+	//     Responses:
+	//			200: efficiencyResponse
+	//			404: badRequest
 	athleteID := getAthleteID(r)
 
 	athlete, err := l.db.GetAthlete(athleteID)

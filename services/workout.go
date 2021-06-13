@@ -19,7 +19,7 @@ func(d *DB) GetAllWorkouts() ([]models.Workout, error){
 	var workout models.Workout
 
 	for rows.Next(){
-		err := rows.Scan(&workout.Workout_ID, &workout.Date, &workout.Description, &workout.Sport, &workout.Rating)
+		err := rows.Scan(&workout.Workout_ID, &workout.Date, &workout.Description, &workout.Sport, &workout.Athlete_ID, &workout.Rating)
 		if err != nil{
 			return nil, err
 		}
