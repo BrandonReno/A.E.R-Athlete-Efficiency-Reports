@@ -5,6 +5,37 @@ import (
 	"github.com/BrandonReno/A.E.R/models"
 )
 
+func(d *DB) GetAllWorkouts() ([]models.Workout, error){
+	var wl []models.Workout
+	sqlStatement := `SELECT * FROM public.workout ORDER BY date DESC`
+
+	rows, err := d.DBConn.Query(sqlStatement)
+	defer rows.Close()
+
+	if err != nil{
+		return nil, err
+	}
+
+	var workout models.Workout
+
+	for rows.Next(){
+		err := rows.Scan(&workout.Workout_ID, &workout.Date, &workout.Description, &workout.Sport, &workout.Rating)
+		if err != nil{
+			return nil, err
+		}
+		wl = append(wl, workout)
+	}
+
+	err = rows.Err()
+
+	if err != nil{
+		return nil, err
+	}
+
+	return wl, nil
+
+}
+
 func (d *DB) CreateWorkout(w *models.Workout) error{
 	sqlStatement := `INSERT INTO public.workout(date, description, sport, athlete_id, rating)
 					 VALUES($1, $2, $3, $4, $5);`

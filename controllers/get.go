@@ -5,6 +5,11 @@ import (
 	"net/http"
 )
 
+func (l *Aer_Log) GetAllWorkouts(rw http.ResponseWriter, r *http.Request){
+	wl, err := l.db.GetAllWorkouts
+}
+
+
 // Gets all workouts in the system
 func (l *Aer_Log) GetWorkouts(rw http.ResponseWriter, r *http.Request) {
 
