@@ -1,30 +1,10 @@
-POST http://localhost:9090/athletes/5phOA2wkBb/workouts
-
-{
-    "date": "5/13/2021",
-    "description": "Hard Workout",
-    "sport": "running",
-    "rating": 2
-}
-
-GET http://localhost:9090/workouts/uf23b
-
-GET http://localhost:9090/workouts/uf23b/5
-
-DELETE http://localhost:9090/workouts/uf23b/5
-
-PUT http://localhost:9090/workouts/uf23b/4
-
-{
-    "date": "5-23-2021",
-    "Description" : "changed the desc!",
-    "sport": "swimming",
-    "rating": 3
-}
+GET http://localhost:9090/
 
 GET http://localhost:9090/athletes/5phOA2wkBb/aer
 
 GET http://localhost:9090/athletes
+
+
 
 POST http://localhost:9090/athletes
 
@@ -34,10 +14,30 @@ POST http://localhost:9090/athletes
     "age": 20
 }
 
+POST http://localhost:9090/athletes/5phOA2wkBb/workouts
+
+{
+    "date": "5/13/2021",
+    "description": "Hard Workout",
+    "sport": "running",
+    "rating": 2
+}
+
+
+
 PUT http://localhost:9090/athletes/JfVGnwnR2O
 
 {
     "first_name": "Kelsey",
     "last_name": "LLoyd",
     "age": 20
+}
+
+PUT http://localhost:9090/athletes/5phOA2wkBb/workouts/4
+
+{
+    "date": "5-23-2021",
+    "Description" : "changed the desc!",
+    "sport": "swimming",
+    "rating": 3
 }
