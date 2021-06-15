@@ -1,18 +1,14 @@
 package pooling
 
-import (
-	"github.com/BrandonReno/A.E.R/services"
-)
-
 type Job struct{
 	Name string
 	Data interface{}
-	Task func()
+	Task func() error
 	Result error
 }
 
 
-func (j *Job) New(name string, data *interface{}, task func(), request string) *Job{
+func (j *Job) New(name string, data *interface{}, task func() error, request string) *Job{
 	return &Job{
 		Name: name,
 		Data: data,
@@ -21,6 +17,6 @@ func (j *Job) New(name string, data *interface{}, task func(), request string) *
 	}
 }
 
-func (j *Job) Process(){
-	j.Task()
+func (j *Job) Process() error{
+	return j.Task()
 }
