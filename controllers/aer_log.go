@@ -2,7 +2,6 @@ package controllers
 
 import (
 	"encoding/json"
-	"fmt"
 	"io"
 	"log"
 	"net/http"
@@ -20,15 +19,6 @@ type KeyCtx struct{} // used for storing context in middleware
 
 func New(l *log.Logger, d *services.DB) *Aer_Log{
 	return &Aer_Log{l, d} //creates and returns a new reference to the aer_Log
-}
-
-func (l *Aer_Log) WelcomeRoute(rw http.ResponseWriter, r *http.Request){
-	_, err := rw.Write([]byte("Welcome to AER, Create an account or login to connect"))
-	if err != nil{
-		l.l.Printf("Error in printing initial welcome: %s", err)
-		http.Error(rw, fmt.Sprintf("Can not print initial welcome: %s", err), http.StatusInternalServerError)
-		return
-	}
 }
 
 func getAthleteID(r *http.Request) string{
