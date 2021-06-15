@@ -15,7 +15,7 @@ func (e *Efficiency) CalculateEfficiency(w []Workout){
 	}
 
 	averageRating = averageRating/len(w)
-	lastInd := len(w)
+	lastInd := len(w) - 1
 
 	if w[lastInd].Rating < averageRating{
 		e.Efficiency_Score /= float64(w[lastInd].Rating)

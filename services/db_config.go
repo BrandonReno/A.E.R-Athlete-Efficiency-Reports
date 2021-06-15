@@ -18,7 +18,11 @@ func (d *DB) OpenDBConnection(user, password, host, db, port string) error {
 
 	d.DBConn, err = sql.Open("postgres", connStr)
 
-	return err
+	if err != nil{
+		return err
+	}
+
+	return nil
 }
 
 func (d *DB) CloseDBConnection(){
