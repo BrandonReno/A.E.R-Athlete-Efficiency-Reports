@@ -7,19 +7,20 @@ import (
 type Job struct{
 	Name string
 	Data interface{}
-	Database *services.DB
+	Task func()
 	Result error
 }
 
 
-func (j *Job) New(name string, data *interface{}, database *services.DB) *Job{
+func (j *Job) New(name string, data *interface{}, task func(), request string) *Job{
 	return &Job{
 		Name: name,
 		Data: data,
-		Database: database,
+		Task: task,
 		Result: nil,
 	}
 }
 
 func (j *Job) Process(){
+	j.Task()
 }
