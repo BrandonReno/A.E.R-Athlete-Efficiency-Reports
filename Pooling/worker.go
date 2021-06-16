@@ -1,14 +1,9 @@
 package pooling
 
-type Work struct{
-	ID int
-	Job Job
-}
-
 type Worker struct{
 	ID int
-	Dispatch_Channel chan chan Work
-	Worker_Channel chan Work
+	Dispatch_Channel chan chan Job
+	Worker_Channel chan Job
 	End chan bool
 }
 
@@ -18,7 +13,7 @@ func (w *Worker) Start(){
 			w.Dispatch_Channel <- w.Worker_Channel
 			select {
 			case task := <- w.Worker_Channel:
-				task.Job.Process()
+				task.Process()
 			case <-w.End:
 				return
 			}
