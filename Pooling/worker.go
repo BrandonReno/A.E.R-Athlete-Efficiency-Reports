@@ -13,7 +13,10 @@ func (w *Worker) Start(){
 			w.Dispatch_Channel <- w.Worker_Channel
 			select {
 				case task := <- w.Worker_Channel:
-					task.Process()
+					err := task.Process()
+					if err != nil{
+						w.End <- true
+					}
 				case <-w.End:
 					return
 			}

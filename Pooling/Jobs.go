@@ -2,9 +2,9 @@ package pooling
 
 type Job struct{
 	Data interface{}
-	Task func(interface{})
+	Task func(interface{}) error
 }
 
-func (j *Job) Process(){
-	j.Task(j.Data)
+func (j *Job) Process()error{
+	return j.Task(j.Data)
 }
