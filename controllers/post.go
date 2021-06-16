@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 	"github.com/BrandonReno/A.E.R/models"
+	"github.com/BrandonReno/A.E.R/pooling"
 )
 
 // Add a workout to the database
@@ -62,11 +63,11 @@ func (l *Aer_Log) CreateAthlete(rw http.ResponseWriter, r *http.Request){
 	//			400 : verror
 
 	athlete := r.Context().Value(KeyCtx{}).(models.Athlete)
-	err := l.db.AddAthlete(&athlete)
 
-	if err != nil{
-		l.l.Printf("Error: Could not create athlete")
-		http.Error(rw, fmt.Sprintf("Error in creating athlete: %s", err), http.StatusBadRequest)
-		return
-	}
+	task := func() error{return l.db.AddAthlete(&athlete)}
+
+	job := &pooling.Job{Task: task}
+	
+	l.collector.EnqueJob(job)
+
 }

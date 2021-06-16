@@ -7,7 +7,6 @@ import (
 	"os"
 	"os/signal"
 	"time"
-
 	"github.com/BrandonReno/A.E.R/controllers"
 	"github.com/BrandonReno/A.E.R/pooling"
 	"github.com/BrandonReno/A.E.R/routes"

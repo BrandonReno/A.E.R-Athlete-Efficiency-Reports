@@ -49,3 +49,7 @@ func StartDispatcher(workerCount int) *Collector {
 	
 	return &collector
 }
+
+func (c *Collector) EnqueJob(j *Job){
+	c.Work <- *j
+}
