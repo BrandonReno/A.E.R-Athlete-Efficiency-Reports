@@ -7,7 +7,7 @@ type Collector struct {
 	End chan bool //End notice comes in through this channel
 }
 
-func StartDispatcher(workerCount int) Collector {
+func StartDispatcher(workerCount int) *Collector {
 	// Create the collector
 
 	incomingJobs := make(chan Job)
@@ -47,5 +47,5 @@ func StartDispatcher(workerCount int) Collector {
 		}
 	}()
 	
-	return collector
+	return &collector
 }

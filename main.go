@@ -7,12 +7,15 @@ import (
 	"os"
 	"os/signal"
 	"time"
+
 	"github.com/BrandonReno/A.E.R/controllers"
+	"github.com/BrandonReno/A.E.R/pooling"
 	"github.com/BrandonReno/A.E.R/routes"
 	"github.com/BrandonReno/A.E.R/services"
 )
 
 const Port = ":9090"
+const Workers = 10
 
 func main() {
 
@@ -32,7 +35,9 @@ func main() {
 		l.Fatal(err)
 	}
 
-	wl := controllers.New(l, &db) //Handler for Workout, gets a log to write errors and such
+	//Initialize the collector and begin listening for jobs
+	collector := pooling.StartDispatcher(Workers)
+	wl := controllers.New(l, &db, collector) //Handler for Workout, gets a log to write errors and such
 
 	muxRouter := routes.NewRouter(wl)
 

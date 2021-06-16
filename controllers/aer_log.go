@@ -6,6 +6,8 @@ import (
 	"log"
 	"net/http"
 	"strconv"
+
+	"github.com/BrandonReno/A.E.R/pooling"
 	"github.com/BrandonReno/A.E.R/services"
 	"github.com/gorilla/mux"
 )
@@ -13,12 +15,13 @@ import (
 type Aer_Log struct{
 	l *log.Logger //Hold a logger that can write errors to the log output
 	db *services.DB
+	collector *pooling.Collector
 }
 
 type KeyCtx struct{} // used for storing context in middleware
 
-func New(l *log.Logger, d *services.DB) *Aer_Log{
-	return &Aer_Log{l, d} //creates and returns a new reference to the aer_Log
+func New(l *log.Logger, d *services.DB, collector *pooling.Collector) *Aer_Log{
+	return &Aer_Log{l, d, collector} //creates and returns a new reference to the aer_Log
 }
 
 func getAthleteID(r *http.Request) string{
