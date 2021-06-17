@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"fmt"
 	"net/http"
 	"github.com/BrandonReno/A.E.R/models"
 	"github.com/BrandonReno/A.E.R/pooling"
@@ -23,28 +22,13 @@ func (l *Aer_Log) AddWorkout(rw http.ResponseWriter, r *http.Request){
 	//			400 : verror
 
 	workout := r.Context().Value(KeyCtx{}).(models.Workout)
-	err := l.db.CreateWorkout(&workout)
-	if err != nil{
-		l.l.Printf("Error: Could not create workout: %s", err)
-		http.Error(rw, fmt.Sprintf("Error in creating workout: %s", err), http.StatusInternalServerError)
-		return
-	}
 
-	athlete, err := l.db.GetAthlete(workout.Athlete_ID)
+	task := func() error{ return l.db.CreateWorkout(&workout)}
 
-	if err != nil{
-		l.l.Printf("Error: Could not find athlete: %s", err)
-		http.Error(rw, fmt.Sprintf("Error could not find athlete: %s", err), http.StatusInternalServerError)
-		return
-	}
+	job := pooling.Job{Name: "Create Workout", Task: task}
 
-	err = l.db.UpdateEfficiency(&athlete)
-	if err != nil{
-		l.l.Printf("Error: Could not update efficiency score: %s", err)
-		http.Error(rw, fmt.Sprintf("Error could not update efficiency score: %s", err), http.StatusInternalServerError)
-		return
-
-	}
+	l.l.Printf("Job enqued to worker pool: %s", job.Name)
+	l.collector.EnqueJob(&job)
 }
 
 // Creates a new athlete
@@ -66,8 +50,9 @@ func (l *Aer_Log) CreateAthlete(rw http.ResponseWriter, r *http.Request){
 
 	task := func() error{return l.db.AddAthlete(&athlete)}
 
-	job := &pooling.Job{Task: task}
 	
+	job := &pooling.Job{Name: "Create Athlete", Task: task}
+	
+	l.l.Printf("Job enqued to worker pool: %s", job.Name)
 	l.collector.EnqueJob(job)
-
 }

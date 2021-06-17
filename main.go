@@ -28,17 +28,16 @@ func main() {
 		os.Getenv("POSTGRES_DB") 
 
 	db := services.DB{}
-	err := db.OpenDBConnection(db_user, db_pass, db_host, db_db, db_port)
 
-	if err != nil {
+	if err := db.OpenDBConnection(db_user, db_pass, db_host, db_db, db_port); err != nil {
 		l.Fatal(err)
 	}
 
 	//Initialize the collector and begin listening for jobs
-	collector := pooling.StartDispatcher(Workers)
-	wl := controllers.New(l, &db, collector) //Handler for Workout, gets a log to write errors and such
+	collector := pooling.StartDispatcher(Workers, l)
+	env := controllers.New(l, &db, collector) //Handler for Workout, gets a log to write errors and such
 
-	muxRouter := routes.NewRouter(wl)
+	muxRouter := routes.NewRouter(env)
 
 	//Create the server :"s"
 	s := http.Server{

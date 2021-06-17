@@ -40,7 +40,22 @@ func (d *DB) CreateWorkout(w *models.Workout) error{
 	sqlStatement := `INSERT INTO public.workout(date, description, sport, athlete_id, rating)
 					 VALUES($1, $2, $3, $4, $5);`
 	_, err := d.DBConn.Exec(sqlStatement,w.Date, w.Description, w.Sport, w.Athlete_ID, w.Rating)
-	return err
+	if err != nil{
+		return err
+	}
+	
+	athlete, err := d.GetAthlete(w.Athlete_ID)
+
+	if err != nil{
+		return err
+	}
+
+	err = d.UpdateEfficiency(&athlete)
+	if err != nil{
+		return err
+	}
+	
+	return nil
 }
 
 func (d *DB) GetUserWorkouts(id string) ([]models.Workout, error){
