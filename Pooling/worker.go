@@ -16,9 +16,9 @@ func (w *Worker) Start() {
 			w.Dispatch_Channel <- w.Worker_Channel //place the worker channel on the dispatch channel
 			select {
 				case task := <-w.Worker_Channel: //In the case that dispatcher send a job
-					w.Log.Printf("Worker %d beginning task...", w.ID)
+					w.Log.Printf("Worker %d assigned task: %s ...processing now...", w.ID, task.Name)
 					err := task.Process() // process the job task
-					w.Log.Printf("Worker %d has finished task: Awaiting new job...", w.ID)
+					w.Log.Printf("Worker %d has finished task: %s,  Awaiting new job...", w.ID, task.Name)
 					if err != nil { // if the task fails
 						w.Log.Printf("Job Failed. Error : %s", err)
 					}
