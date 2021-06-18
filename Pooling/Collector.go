@@ -60,3 +60,7 @@ func StartDispatcher(workerCount int, l *log.Logger) *Collector {
 func (c *Collector) EnqueJob(j *Job){
 	c.Work <- *j
 }
+
+func (c *Collector) EndProcesses(){
+	c.End <- true
+}

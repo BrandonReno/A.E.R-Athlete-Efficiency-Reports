@@ -65,6 +65,8 @@ func main() {
 
 	sig_result := <-sigChan //Send channel Signal output to result to log the reasoning for shutdown
 	l.Println("Shutdown initiated with ", sig_result)
+	collector.EndProcesses() // Stop all workers and stop accepting jobs
+	l.Println("All workers successfully have been stopped")
 	db.CloseDBConnection() //close database connection
 	l.Println("Postgres connecttion successfully closed")
 
