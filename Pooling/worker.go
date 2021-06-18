@@ -20,8 +20,7 @@ func (w *Worker) Start() {
 					err := task.Process() // process the job task
 					w.Log.Printf("Worker %d has finished task: Awaiting new job...", w.ID)
 					if err != nil { // if the task fails
-						w.Log.Printf("Job Failed, sending End note now. Error : %s", err)
-						w.End <- true // signal end to the dispatcher
+						w.Log.Printf("Job Failed. Error : %s", err)
 					}
 				case <-w.End:
 				return
