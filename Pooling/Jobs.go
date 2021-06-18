@@ -1,10 +1,11 @@
 package pooling
 
-type Job struct{
-	Data interface{}
-	Task func(interface{}) error
+type Job struct {
+	Name string //name used for logging to say what task is being processed
+	Task func() error 
 }
 
-func (j *Job) Process()error{
-	return j.Task(j.Data)
+// return the result of running the task
+func (j *Job) Process() error {
+	return j.Task()
 }

@@ -3,7 +3,9 @@ package controllers
 import (
 	"fmt"
 	"net/http"
+
 	"github.com/BrandonReno/A.E.R/models"
+	"github.com/BrandonReno/A.E.R/pooling"
 )
 
 // Update a workout in the database
@@ -33,12 +35,14 @@ func (l *Aer_Log) UpdateWorkout(rw http.ResponseWriter, r *http.Request) {
 	}
 
 	workout.Workout_ID = wid
-	err = l.db.UpdateWorkout(&workout)
 
-	if err != nil{
-		http.Error(rw, fmt.Sprintf("Error updating workout: %s", err), http.StatusInternalServerError)
-		return
-	}
+	task := func() error { return l.db.UpdateWorkout(&workout)}
+
+	job := pooling.Job{Name: "Update Workout", Task: task}
+
+	l.l.Printf("Job enqued to worker pool: %s", job.Name)
+
+	l.collector.EnqueJob(&job)
 }
 
 // Update an athlete in the database
@@ -63,10 +67,13 @@ func (l *Aer_Log) UpdateAthlete(rw http.ResponseWriter, r *http.Request){
 	athlete_id := getAthleteID(r)
 	athlete := r.Context().Value(KeyCtx{}).(models.Athlete)
 	athlete.Athlete_ID = athlete_id
-	err := l.db.UpdateAthlete(&athlete)
-	if err != nil{
-		http.Error(rw, fmt.Sprintf("Error in updating athlete: %s", err), http.StatusBadRequest)
-		return
-	}
+	
 
+	task := func() error{ return l.db.UpdateAthlete(&athlete)}
+
+	job := pooling.Job{Name: "Update Athlete", Task: task}
+
+	l.l.Printf("Job enqued to worker pool: %s", job.Name)
+	
+	l.collector.EnqueJob(&job)
 }
