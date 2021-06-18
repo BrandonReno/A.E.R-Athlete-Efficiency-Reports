@@ -3,6 +3,9 @@ package controllers
 import (
 	"fmt"
 	"net/http"
+
+	"github.com/BrandonReno/A.E.R/models"
+	"github.com/BrandonReno/A.E.R/pooling"
 )
 
 //lists all workouts from all athletes
@@ -19,15 +22,16 @@ func (l *Aer_Log) GetAllWorkouts(rw http.ResponseWriter, r *http.Request){
 	//     Responses:
 	//			200: workoutsResponse
 
-	wl, err := l.db.GetAllWorkouts()
+	workout_channel := make(chan []models.Workout, 1)
+	task := func() error{ return l.db.GetAllWorkouts(workout_channel)}
 
-	if err != nil{
-		l.l.Printf("Error: Could not obtain all workouts: %s", err)
-		http.Error(rw, fmt.Sprintf("Error could not get workouts: %s", err), http.StatusBadRequest)
-		return
-	}
+	job := pooling.Job{Name: "Get all Workouts", Task: task}
 
-	err = ToJSON(wl, rw)
+	l.collector.EnqueJob(&job)
+
+	wl := <- workout_channel
+
+	err := ToJSON(wl, rw)
 
 	if err != nil{
 		l.l.Printf("Error: Could not serialize workouts: %s", err)

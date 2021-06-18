@@ -5,7 +5,7 @@ import (
 	"github.com/BrandonReno/A.E.R/models"
 )
 
-func(d *DB) GetAllWorkouts() ([]models.Workout, error){
+func(d *DB) GetAllWorkouts(wc chan <- []models.Workout) error{
 	var wl []models.Workout
 	sqlStatement := `SELECT * FROM public.workout ORDER BY date DESC`
 
@@ -13,15 +13,14 @@ func(d *DB) GetAllWorkouts() ([]models.Workout, error){
 	defer rows.Close()
 
 	if err != nil{
-		return nil, err
+		return err
 	}
 
 	var workout models.Workout
-
 	for rows.Next(){
 		err := rows.Scan(&workout.Workout_ID, &workout.Date, &workout.Description, &workout.Sport, &workout.Athlete_ID, &workout.Rating)
 		if err != nil{
-			return nil, err
+			return err
 		}
 		wl = append(wl, workout)
 	}
@@ -29,10 +28,12 @@ func(d *DB) GetAllWorkouts() ([]models.Workout, error){
 	err = rows.Err()
 
 	if err != nil{
-		return nil, err
+		return err
 	}
 
-	return wl, nil
+	wc <- wl
+
+	return nil
 
 }
 
