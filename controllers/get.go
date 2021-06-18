@@ -59,13 +59,17 @@ func (l *Aer_Log) GetWorkouts(rw http.ResponseWriter, r *http.Request) {
 
 	id := getAthleteID(r)
 
-	wl, err := l.db.GetUserWorkouts(id)
-	if err != nil {
-		l.l.Printf("Error: Could not obtain user workouts: %s", err)
-		http.Error(rw, fmt.Sprintf("Error getting user workouts: %s", err), http.StatusBadRequest)
-		return
-	}
-	err = ToJSON(wl, rw) //Encode the list from structs to JSON objects
+	wc := make(chan []models.Workout, 1)
+	task := func() error { return l.db.GetUserWorkouts(id, wc)}
+
+	job := pooling.Job{Name: "Get Athlete Workouts", Task: task}
+
+	l.collector.EnqueJob(&job)
+
+	wl := <- wc
+	
+
+	err := ToJSON(wl, rw) //Encode the list from structs to JSON objects
 	if err != nil {      //if json can not be encoded return an error and log the error while also returning out of the function
 		l.l.Printf("Error: Could not encode to JSON: %s", err)
 		http.Error(rw, "Unable to encode JSON object", http.StatusInternalServerError)
@@ -97,13 +101,14 @@ func (l *Aer_Log) GetSingleWorkout(rw http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	w, err := l.db.GetSingleWorkout(Athlete_ID, Workout_ID)
+	wc := make(chan models.Workout, 1)
+	task := func() error { return l.db.GetSingleWorkout(Athlete_ID, Workout_ID, wc)}
 
-	if err != nil {
-		l.l.Printf("Error: Could not get workoutID, athleteID match: %s", err)
-		http.Error(rw, fmt.Sprintf("Error in getting workout: %s", err), http.StatusBadRequest)
-		return
-	}
+	job := pooling.Job{Name: "Get single Workout", Task: task}
+
+	l.collector.EnqueJob(&job)
+
+	w := <- wc
 
 	err = ToJSON(w, rw)
 
@@ -130,13 +135,17 @@ func (l *Aer_Log) GetAthlete(rw http.ResponseWriter, r *http.Request) {
 	//			404: badRequest
 
 	athlete_id := getAthleteID(r)
-	athlete, err := l.db.GetAthlete(athlete_id)
-	if err != nil {
-		l.l.Printf("Error: could not get athlete from athlete_id %s : %s", athlete_id, err)
-		http.Error(rw, fmt.Sprintf("Error in getting athlete: %s", err), http.StatusBadRequest)
-		return
-	}
-	err = ToJSON(athlete, rw)
+
+	ac := make(chan models.Athlete)
+	task := func() error {return l.db.GetAthlete(athlete_id, ac)}
+
+	job := pooling.Job{Name: "Get single Athlete", Task: task}
+
+	l.collector.EnqueJob(&job)
+
+	athlete := <-ac
+
+	err := ToJSON(athlete, rw)
 	if err != nil {
 		l.l.Printf("Error: Could not encode to JSON: %s", err)
 		http.Error(rw, fmt.Sprintf("Error in encoding workout to JSON: %s", err), http.StatusBadRequest)
@@ -158,14 +167,17 @@ func (l *Aer_Log) GetAllAthletes(rw http.ResponseWriter, r *http.Request) {
 	//     Responses:
 	//			200: athletesResponse
 
-	athletes, err := l.db.GetAllAthletes()
-	if err != nil {
-		l.l.Printf("Error: Could not retrieve list of athletes: %s", err)
-		http.Error(rw, fmt.Sprintf("Error getting all athletes: %s", err), http.StatusBadRequest)
-		return
-	}
+	ac := make(chan []models.Athlete, 1)
+
+	task := func() error{ return l.db.GetAllAthletes(ac)}
+
+	job := pooling.Job{Name: "Get all Athletes", Task: task}
+
+	l.collector.EnqueJob(&job)
+
+	athletes := <- ac
 	
-	err = ToJSON(athletes, rw)
+	err := ToJSON(athletes, rw)
 	if err != nil {
 		l.l.Printf("Error: Could not encode to JSON: %s", err)
 		http.Error(rw, fmt.Sprintf("Error in encoding workout to JSON: %s", err), http.StatusBadRequest)
@@ -189,22 +201,28 @@ func (l *Aer_Log) GetAthleteEfficiency(rw http.ResponseWriter, r *http.Request){
 	//			404: badRequest
 	athleteID := getAthleteID(r)
 
-	athlete, err := l.db.GetAthlete(athleteID)
+	ac := make(chan models.Athlete, 1)
 
-	if err != nil{
-		l.l.Printf("Error: could not get athlete: %s", err)
-		http.Error(rw, fmt.Sprintf("Error in getting athlete from database, athlete id might not exist: %s", err), http.StatusBadRequest)
-		return
-	}
-	e, err := l.db.GetEfficiency(&athlete)
+	task := func () error { return l.db.GetAthlete(athleteID, ac)}
 
-	if err != nil{
-		l.l.Printf("Error: could not get athletes efficiency: %s", err)
-		http.Error(rw, fmt.Sprintf("Error in getting athletes efficiency from database: %s", err), http.StatusBadRequest)
-		return
-	}
+	job := pooling.Job{Name: "Get Efficiency - Fetching Athlete", Task: task}
 
-	err = ToJSON(e, rw)
+	l.collector.EnqueJob(&job)
+
+	athlete := <-ac
+
+
+	ec := make(chan models.Efficiency)
+
+	task = func() error { return l.db.GetEfficiency(&athlete, ec)}
+
+	job = pooling.Job{Name: "Get Efficiency", Task: task}
+
+	l.collector.EnqueJob(&job)
+
+	e := <- ec
+
+	err := ToJSON(e, rw)
 
 	if err != nil{
 		l.l.Printf("Error: could not transfer efficiency to json: %s", err)

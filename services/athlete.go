@@ -34,42 +34,48 @@ func (d *DB) AddAthlete(a *models.Athlete) error{
 	return err
 }
 
-func (d *DB) GetAthlete(id string) (models.Athlete, error){
+func (d *DB) GetAthlete(id string, ac chan <- models.Athlete) error{
 	var athlete models.Athlete
 	sqlStatement := `SELECT * FROM public.athlete WHERE Athlete_ID = $1;`
 	row := d.DBConn.QueryRow(sqlStatement, id)
 	err := row.Scan(&athlete.Athlete_ID, &athlete.First_Name, &athlete.Last_Name, &athlete.Age, &athlete.Joined)
 
 	if err != nil{
-		return models.Athlete{},err
+		return err
 	}
 
-	return athlete, nil
+	ac <- athlete
+
+	return  nil
 }
 
-func (d *DB) GetAllAthletes() ([]models.Athlete, error){
+func (d *DB) GetAllAthletes(ac chan []models.Athlete) error{
 	sqlStatement := `SELECT * FROM public.athlete;`
 	rows, err := d.DBConn.Query(sqlStatement)
-	defer rows.Close()
-
+	
 	if err != nil{
-		return nil,err
+		return err
 	}
+
+	defer rows.Close()
 
 	var al []models.Athlete
 	var athlete models.Athlete
 	for rows.Next(){
 		err := rows.Scan(&athlete.Athlete_ID, &athlete.First_Name, &athlete.Last_Name, &athlete.Age, &athlete.Joined)
 		if err != nil{
-			return nil, err
+			return err
 		}
 		al = append(al, athlete)
 	}
 	err = rows.Err()
 	if err != nil{
-		return nil, err
+		return err
 	}
-	return al, nil
+
+	ac <- al
+	
+	return nil
 }
 
 func (d *DB) UpdateAthlete(a *models.Athlete) error{
