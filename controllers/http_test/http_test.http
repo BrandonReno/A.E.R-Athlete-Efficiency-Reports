@@ -2,12 +2,6 @@ GET http://localhost:9090/
 
 GET http://localhost:9090/athletes
 
-GET http://localhost:9090/athletes/obpg5wDZjn/aer
-
-GET http://localhost:9090/athletes/K7MO2pVcdE/aer
-
-
-
 POST http://localhost:9090/athletes
 
 {
@@ -16,30 +10,37 @@ POST http://localhost:9090/athletes
     "age": 27
 }
 
-PUT http://localhost:9090/athletes/obpg5wDZjn/workouts/27
+PUT http://localhost:9090/athletes/cSZjAXKA5v
+
+{
+    "first_name": "Brandon",
+    "last_name": "Ricardo",
+    "age": 23
+}
+
+GET http://localhost:9090/athletes/cSZjAXKA5v/aer
+
+GET http://localhost:9090/athletes/cSZjAXKA5v/workouts
+
+
+POST http://localhost:9090/athletes/cSZjAXKA5v/workouts
 
 {
     "date": "6/14/2021",
-    "description": "Hard Workout",
+    "description": "Short rest 25s freestyle",
     "sport": "swimming",
-    "rating": 8
+    "rating": 9
 }
 
-
-
-PUT http://localhost:9090/athletes/qaB18cP15n
+PUT http://localhost:9090/athletes/cSZjAXKA5v/workouts/33
 
 {
-    "first_name": "BRANDON",
-    "last_name": "RENO",
-    "age": "f:"
-}
-
-PUT http://localhost:9090/athletes/5phOA2wkBb/workouts/4
-
-{
-    "date": "5-23-2021",
-    "Description" : "changed the desc!",
+    "date": "6/21/2021",
+    "description": "Short rest 25s freestyle, dolphin kick and breath holding",
     "sport": "swimming",
-    "rating": 3
+    "rating": 9
 }
+
+DELETE http://localhost:9090/athletes/cSZjAXKA5v
+
+DELETE http://localhost:9090/athletes/cSZjAXKA5v/workouts/33

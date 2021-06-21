@@ -27,6 +27,8 @@ func (l *Aer_Log) GetAllWorkouts(rw http.ResponseWriter, r *http.Request){
 
 	job := pooling.Job{Name: "Get all Workouts", Task: task}
 
+	l.l.Printf("Job enqued to worker pool: %s", job.Name)
+
 	l.collector.EnqueJob(&job)
 
 	wl := <- workout_channel
@@ -64,6 +66,7 @@ func (l *Aer_Log) GetWorkouts(rw http.ResponseWriter, r *http.Request) {
 
 	job := pooling.Job{Name: "Get Athlete Workouts", Task: task}
 
+	l.l.Printf("Job enqued to worker pool: %s", job.Name)
 	l.collector.EnqueJob(&job)
 
 	wl := <- wc
@@ -106,6 +109,7 @@ func (l *Aer_Log) GetSingleWorkout(rw http.ResponseWriter, r *http.Request) {
 
 	job := pooling.Job{Name: "Get single Workout", Task: task}
 
+	l.l.Printf("Job enqued to worker pool: %s", job.Name)
 	l.collector.EnqueJob(&job)
 
 	w := <- wc
@@ -141,6 +145,7 @@ func (l *Aer_Log) GetAthlete(rw http.ResponseWriter, r *http.Request) {
 
 	job := pooling.Job{Name: "Get single Athlete", Task: task}
 
+	l.l.Printf("Job enqued to worker pool: %s", job.Name)
 	l.collector.EnqueJob(&job)
 
 	athlete := <-ac
@@ -173,6 +178,7 @@ func (l *Aer_Log) GetAllAthletes(rw http.ResponseWriter, r *http.Request) {
 
 	job := pooling.Job{Name: "Get all Athletes", Task: task}
 
+	l.l.Printf("Job enqued to worker pool: %s", job.Name)
 	l.collector.EnqueJob(&job)
 
 	athletes := <- ac
@@ -207,6 +213,7 @@ func (l *Aer_Log) GetAthleteEfficiency(rw http.ResponseWriter, r *http.Request){
 
 	job := pooling.Job{Name: "Get Efficiency - Fetching Athlete", Task: task}
 
+	l.l.Printf("Job enqued to worker pool: %s", job.Name)
 	l.collector.EnqueJob(&job)
 
 	athlete := <-ac
@@ -218,6 +225,7 @@ func (l *Aer_Log) GetAthleteEfficiency(rw http.ResponseWriter, r *http.Request){
 
 	job = pooling.Job{Name: "Get Efficiency", Task: task}
 
+	l.l.Printf("Job enqued to worker pool: %s", job.Name)
 	l.collector.EnqueJob(&job)
 
 	e := <- ec
