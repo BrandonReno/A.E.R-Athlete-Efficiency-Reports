@@ -3,10 +3,8 @@ services:
   postgres:
     image: postgres
     container_name: postgres
-    environment:
-      - POSTGRES_USER=postgres 
-      - POSTGRES_PASSWORD=renol114
-      - POSTGRES_DB=A.E.R
+    env_file:
+      - env/service/postgres.env
     ports:
       - "5432:5432"
     volumes:
@@ -14,18 +12,28 @@ services:
 
   api:
     build: 
-      context: .
+      context: backend
+      dockerfile: api/Dockerfile
     container_name: aer_app
-    environment:
-      - POSTGRES_HOST=db
-      - POSTGRES_USER=postgres 
-      - POSTGRES_PASS=renol114
-      - POSTGRES_PORT=5432
-      - POSTGRES_DB=A.E.R 
+    env_file:
+      - env/db.env
     ports: 
       - "9090:9090"
     depends_on: 
-      - db
+      - postgres
+    command: /app/server.bin
+
+  migration:
+    build:
+      context: backend
+      dockerfile: migration/Dockerfile
+    container_name: aer_migration
+    env_file:
+      - env/db.env
+    depends_on:
+      - postgres
+    command: /migrations/entrypoint.sh
+      
 
 volumes:
   backend_aer:
