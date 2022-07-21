@@ -15,7 +15,7 @@ import (
 func TestWorkout_GetAll(t *testing.T) {
 	t.Run("GetAll -- Success", func(t *testing.T) {
 		SetupEndpoints(t, func(fixture *mocks.BackendFixture) {
-			fixture.WorkoutRepo.On("GetAll", mockery.Anything).Return([]*models.Workout{{Workout_ID: 1}}, nil)
+			fixture.WorkoutRepo.On("GetAll", mockery.Anything).Return([]*models.Workout{{WorkoutID: 1}}, nil)
 			resp, err := fixture.MakeRequest(http.MethodGet, fixture.MakeURL("/workouts"), nil)
 			require.NoError(t, err)
 			require.Equal(t, resp.StatusCode, http.StatusOK)
@@ -23,7 +23,7 @@ func TestWorkout_GetAll(t *testing.T) {
 			err = fixture.UnmarshallResponseData(resp, &workouts)
 			require.NoError(t, err)
 			require.NotNil(t, workouts)
-			require.Equal(t, workouts[0].Workout_ID, 1)
+			require.Equal(t, workouts[0].WorkoutID, 1)
 		})
 	})
 }
@@ -32,7 +32,7 @@ func TestWorkout_GetOne(t *testing.T) {
 	t.Run("GetOne -- Success", func(t *testing.T) {
 		SetupEndpoints(t, func(fixture *mocks.BackendFixture) {
 			workoutID := 1
-			fixture.WorkoutRepo.On("GetByID", mockery.Anything, workoutID).Return(&models.Workout{Workout_ID: workoutID}, nil)
+			fixture.WorkoutRepo.On("GetByID", mockery.Anything, workoutID).Return(&models.Workout{WorkoutID: workoutID}, nil)
 			resp, err := fixture.MakeRequest(http.MethodGet, fixture.MakeURL("/workouts/1"), nil)
 			require.NoError(t, err)
 			require.Equal(t, resp.StatusCode, http.StatusOK)
@@ -40,7 +40,7 @@ func TestWorkout_GetOne(t *testing.T) {
 			err = fixture.UnmarshallResponseData(resp, &workout)
 			require.NoError(t, err)
 			require.NotNil(t, workout)
-			require.Equal(t, workout.Workout_ID, workoutID)
+			require.Equal(t, workout.WorkoutID, workoutID)
 		})
 	})
 }
@@ -50,14 +50,14 @@ func TestWorkout_Create(t *testing.T) {
 		SetupEndpoints(t, func(fixture *mocks.BackendFixture) {
 			workoutID := 1
 			fixture.WorkoutRepo.On("Create", mockery.Anything, mockery.Anything).Return(nil)
-			resp, err := fixture.MakeRequest(http.MethodPost, fixture.MakeURL("/workouts"), &models.Workout{Workout_ID: workoutID})
+			resp, err := fixture.MakeRequest(http.MethodPost, fixture.MakeURL("/workouts"), &models.Workout{WorkoutID: workoutID})
 			require.NoError(t, err)
 			require.Equal(t, resp.StatusCode, http.StatusCreated)
 			var workout *models.Workout
 			err = fixture.UnmarshallResponseData(resp, &workout)
 			require.NoError(t, err)
 			require.NotNil(t, workout)
-			require.Equal(t, workout.Workout_ID, workoutID)
+			require.Equal(t, workout.WorkoutID, workoutID)
 		})
 	})
 }
