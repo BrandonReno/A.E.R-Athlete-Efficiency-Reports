@@ -17,7 +17,6 @@ type (
 	WorkoutRepository interface {
 		Create(ctx context.Context, w *models.Workout) error
 		GetAll(ctx context.Context) ([]*models.Workout, error)
-		GetAllByAthleteID(ctx context.Context, aid int) ([]*models.Workout, error)
 		GetByID(ctx context.Context, wid int) (*models.Workout, error)
 	}
 )

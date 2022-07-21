@@ -28,15 +28,37 @@ func (wr *workoutRepository) GetAll(ctx context.Context) ([]*models.Workout, err
 	if err := wr.db.WithContext(ctx).Find(workouts).Error; err != nil {
 		return nil, err
 	}
+	for _, w := range workouts{
+		excercises, err := wr.getExcercises(ctx, w.WorkoutID)
+		if err != nil{
+			return nil, err
+		}
+		for _, e := range excercises{
+			sets, err := wr.getSets(ctx, e.ID)
+			if err != nil{
+				return nil, err
+			}
+			e.Sets = sets
+		}
+		w.Excercises = excercises	
+	}
 	return workouts, nil
 }
 
-func (wr *workoutRepository) GetAllByAthleteID(ctx context.Context, aid int) ([]*models.Workout, error) {
-	var workouts []*models.Workout
-	if err := wr.db.WithContext(ctx).Where("athlete_id = @athlete_id", sql.Named("athlete_id", aid)).Find(workouts).Error; err != nil {
+func (wr *workoutRepository) getExcercises(ctx context.Context, wid int) ([]*models.Excercise, error){
+	var excercises []*models.Excercise
+	if err := wr.db.WithContext(ctx).Find(excercises).Error; err != nil {
 		return nil, err
 	}
-	return workouts, nil
+	return excercises, nil
+}
+
+func (wr *workoutRepository) getSets(ctx context.Context, excID int) ([]*models.Set, error){
+	var sets []*models.Set
+	if err := wr.db.WithContext(ctx).Find(sets).Error; err != nil {
+		return nil, err
+	}
+	return sets, nil
 }
 
 func (wr *workoutRepository) GetByID(ctx context.Context, wid int) (*models.Workout, error) {
