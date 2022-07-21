@@ -12,8 +12,8 @@ services:
 
   api:
     build: 
-      context: backend
-      dockerfile: api/Dockerfile
+      context: .
+      dockerfile: Dockerfile
     container_name: aer_app
     env_file:
       - env/db.env

@@ -7,6 +7,7 @@ import (
 
 	"github.com/BrandonReno/A.E.R/config"
 	"github.com/BrandonReno/A.E.R/handler"
+	"github.com/BrandonReno/A.E.R/repository"
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
 	"github.com/sirupsen/logrus"
@@ -18,6 +19,8 @@ var Module = fx.Options(
 		config.NewConfig,
 		config.NewDatabaseClient,
 		config.NewHTTPClient,
+		repository.NewWorkoutRepository,
+		handler.NewWorkoutHandler,
 		NewRouter,
 	),
 	fx.Invoke(

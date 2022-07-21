@@ -1,6 +1,7 @@
 package config
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/caarlos0/env"
@@ -39,6 +40,7 @@ func LoadConfig(cfgs ...interface{}) error {
 func NewDatabaseClient(cfg *Config) (*gorm.DB, error) {
 	db, err := gorm.Open(cfg.DBDialect, cfg.DBURL)
 	if err != nil {
+		fmt.Println("error")
 		return nil, err
 	}
 	db.DB().SetMaxIdleConns(cfg.DBIdleConns)
