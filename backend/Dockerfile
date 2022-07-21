@@ -9,20 +9,22 @@ COPY go.mod go.sum ./
 RUN go mod download -x
 
 COPY Makefile ./
-COPY ./api ./api
+COPY ./handler ./api
+COPY ./models ./models 
+COPY ./repository ./repository
+COPY ./server ./server
 COPY ./config ./config
 
 RUN make build service=api output=server
 
 
 
-FROM alpine:latest
-RUN apk --no-cache add ca-certificates
+FROM alpine:3.12
+    RUN apk --no-cache add ca-certificates
 
 WORKDIR /app
 
 COPY --from=builder /app/bin/api/server.bin ./
 
 RUN  chmod +x server.bin
-
-
+CMD /app/server.bin

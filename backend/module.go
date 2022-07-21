@@ -6,6 +6,7 @@ import (
 	"net/http"
 
 	"github.com/BrandonReno/A.E.R/config"
+	"github.com/BrandonReno/A.E.R/handler"
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
 	"github.com/sirupsen/logrus"
@@ -21,12 +22,19 @@ var Module = fx.Options(
 	),
 	fx.Invoke(
 		RunServer,
+		MountRoutes,
 	),
 )
 
 type MountRouteParams struct {
 	fx.In
-	Router chi.Router
+	Router         chi.Router
+	WorkoutHandler *handler.WorkoutHandler
+}
+
+func MountRoutes(params MountRouteParams) error {
+	params.WorkoutHandler.MountRoutes(params.Router)
+	return nil
 }
 
 func NewRouter() chi.Router {

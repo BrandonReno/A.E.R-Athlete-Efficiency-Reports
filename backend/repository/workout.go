@@ -28,24 +28,24 @@ func (wr *workoutRepository) GetAll(ctx context.Context) ([]*models.Workout, err
 	if err := wr.db.WithContext(ctx).Find(workouts).Error; err != nil {
 		return nil, err
 	}
-	for _, w := range workouts{
+	for _, w := range workouts {
 		excercises, err := wr.getExcercises(ctx, w.WorkoutID)
-		if err != nil{
+		if err != nil {
 			return nil, err
 		}
-		for _, e := range excercises{
+		for _, e := range excercises {
 			sets, err := wr.getSets(ctx, e.ID)
-			if err != nil{
+			if err != nil {
 				return nil, err
 			}
 			e.Sets = sets
 		}
-		w.Excercises = excercises	
+		w.Excercises = excercises
 	}
 	return workouts, nil
 }
 
-func (wr *workoutRepository) getExcercises(ctx context.Context, wid int) ([]*models.Excercise, error){
+func (wr *workoutRepository) getExcercises(ctx context.Context, wid int) ([]*models.Excercise, error) {
 	var excercises []*models.Excercise
 	if err := wr.db.WithContext(ctx).Find(excercises).Error; err != nil {
 		return nil, err
@@ -53,7 +53,7 @@ func (wr *workoutRepository) getExcercises(ctx context.Context, wid int) ([]*mod
 	return excercises, nil
 }
 
-func (wr *workoutRepository) getSets(ctx context.Context, excID int) ([]*models.Set, error){
+func (wr *workoutRepository) getSets(ctx context.Context, excID int) ([]*models.Set, error) {
 	var sets []*models.Set
 	if err := wr.db.WithContext(ctx).Find(sets).Error; err != nil {
 		return nil, err
