@@ -1,34 +1,22 @@
 package models
 
 import (
-	"strings"
+	"time"
 
-	"github.com/go-playground/validator"
+	validation "github.com/go-ozzo/ozzo-validation/v4"
 )
 
 type Workout struct {
-	WorkoutID   int          `json:"workout_id"`
-	Date        string       `json:"date"`
-	Title       string       `json:"title"`
-	Description string       `json:"description" validate:"required"`
-	Excercises  []*Excercise `json:"excercises"`
+	WorkoutID   int          `json:"id,omitempty" gorm:"primaryKey"`
+	Title       string       `json:"title" gorm:"type:text; not null"`
+	Description string       `json:"description" gorm:"type:text; not null"`
+	CreatedAt   time.Time    `json:"created_at,omitempty" gorm:"not null;default:now()"`
+	Excercises  []*Excercise `json:"excercises" gorm:"-"`
 }
 
-var AvailableSports = []string{"swimming", "running", "lifting", "biking"}
-
-func (w *Workout) Validate_Workout() error {
-	validate := validator.New()                         // Create a new validator and hold it in var validate
-	validate.RegisterValidation("Sport", validateSport) // register the Sport field with the validate sport function
-	err := validate.Struct(w)                           // validate the struct w and return any errors
-	return err
-}
-
-func validateSport(fl validator.FieldLevel) bool {
-	sport := fl.Field().String()         // get the string value of the sport field
-	for _, sp := range AvailableSports { // iterate through accessible sports
-		if strings.ToLower(sport) == strings.ToLower(sp) { // if the field sport is in the acceptable sports return true else false
-			return true
-		}
-	}
-	return false
+func (w Workout) Validate() error{
+	return validation.ValidateStruct(&w,
+		validation.Field(&w.Title, validation.Required, validation.Length(3, 40)),
+		validation.Field(&w.Description, validation.Required, validation.Length(3,200)),
+	)
 }

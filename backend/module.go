@@ -29,14 +29,17 @@ var Module = fx.Options(
 	),
 )
 
-type MountRouteParams struct {
-	fx.In
-	Router         chi.Router
-	WorkoutHandler *handler.WorkoutHandler
-}
+type (
+	MountRouteParams struct {
+		fx.In
+		Router         chi.Router
+		WorkoutHandler *handler.WorkoutHandler
+	}
+)
 
 func MountRoutes(params MountRouteParams) error {
 	params.WorkoutHandler.MountRoutes(params.Router)
+	fmt.Println("moounted")
 	return nil
 }
 

@@ -9,14 +9,15 @@
 
 CREATE TABLE IF NOT EXISTS workouts(
     id SERIAL PRIMARY KEY,
-    created_at TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT NOW(),
-    description VARCHAR(200)
+    title TEXT VARCHAR(40) NULL,
+    description VARCHAR(200) NOT NULL,
+    created_at TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT NOW()
 );
 
 CREATE TABLE IF NOT EXISTS excercises (
     id SERIAL PRIMARY KEY,
-    title TEXT NOT NULL,
-    description TEXT,
+    title TEXT VARCHAR(40) NULL,
+    description VARCHAR(200) NOT NULL,
     workout_id INT NOT NULL REFERENCES workouts (id) ON DELETE CASCADE
 );
 

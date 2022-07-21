@@ -1,16 +1,16 @@
 package config
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/caarlos0/env"
-	"github.com/jinzhu/gorm"
+	"gorm.io/driver/postgres"
+	"gorm.io/gorm"
 )
 
 type (
 	Config struct {
-		ServerPort      int    `env:"SERVER_PORT" envDefault:"5050"`
+		ServerPort      int    `env:"SERVER_PORT" envDefault:"9090"`
 		ServerDebugMode bool   `env:"SERVER_DEBUG_MODE" envDefault:"false"`
 		DBURL           string `env:"DATABASE_URL" envDefault:"postgres://postgres:postgres@postgres/postgres?sslmode=disable"`
 		DBDialect       string `env:"DATABASE_DIALECT" envDefault:"postgres"`
@@ -38,13 +38,18 @@ func LoadConfig(cfgs ...interface{}) error {
 }
 
 func NewDatabaseClient(cfg *Config) (*gorm.DB, error) {
-	db, err := gorm.Open(cfg.DBDialect, cfg.DBURL)
+	opt := gorm.Config{
+		PrepareStmt: true,
+	}
+	db, err := gorm.Open(postgres.Open(cfg.DBURL), &opt)
 	if err != nil {
-		fmt.Println("error")
 		return nil, err
 	}
-	db.DB().SetMaxIdleConns(cfg.DBIdleConns)
-	db.LogMode(cfg.DBDebugMode)
+	inner, err := db.DB()
+	if err != nil {
+		return nil, err
+	}
+	inner.SetMaxIdleConns(cfg.DBIdleConns)
 	return db, nil
 }
 

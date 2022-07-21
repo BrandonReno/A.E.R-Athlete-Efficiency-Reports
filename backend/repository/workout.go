@@ -25,7 +25,7 @@ func (wr *workoutRepository) Create(ctx context.Context, w *models.Workout) erro
 
 func (wr *workoutRepository) GetAll(ctx context.Context) ([]*models.Workout, error) {
 	var workouts []*models.Workout
-	if err := wr.db.WithContext(ctx).Find(workouts).Error; err != nil {
+	if err := wr.db.WithContext(ctx).Find(&workouts).Error; err != nil {
 		return nil, err
 	}
 	for _, w := range workouts {
@@ -53,8 +53,8 @@ func (wr *workoutRepository) getExcercises(ctx context.Context, wid int) ([]*mod
 	return excercises, nil
 }
 
-func (wr *workoutRepository) getSets(ctx context.Context, excID int) ([]*models.Set, error) {
-	var sets []*models.Set
+func (wr *workoutRepository) getSets(ctx context.Context, excID int) ([]*models.Sets, error) {
+	var sets []*models.Sets
 	if err := wr.db.WithContext(ctx).Find(sets).Error; err != nil {
 		return nil, err
 	}
