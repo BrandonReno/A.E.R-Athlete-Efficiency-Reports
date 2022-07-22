@@ -66,7 +66,7 @@ func (wr *workoutRepository) setExcersicesandSets(ctx context.Context, w *models
 	return nil
 }
 
-func (wr *workoutRepository) addExcersicesandSets(ctx context.Context, w *models.Workout) error{
+func (wr *workoutRepository) addExcersicesandSets(ctx context.Context, w *models.Workout) error {
 	for _, e := range w.Excercises {
 		e.WorkoutID = w.ID
 		if err := wr.db.WithContext(ctx).Create(e).Error; err != nil {
