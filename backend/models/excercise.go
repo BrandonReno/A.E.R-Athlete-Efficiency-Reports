@@ -8,6 +8,7 @@ type Excercise struct {
 	ID          int     `json:"id,omitempty" gorm:"primaryKey"`
 	Title       string  `json:"title" gorm:"type:text; not null"`
 	Description string  `json:"description" gorm:"type:text; not null"`
+	WorkoutID   int     `json:"workout_id,omitempty" gorm:"type:integer references workouts(id);not null;unique"`
 	Sets        []*Sets `json:"sets" gorm:"-"`
 }
 
